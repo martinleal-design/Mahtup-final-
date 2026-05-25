@@ -10,9 +10,15 @@
             darkMode: 'class',
         }
     </script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)'], ['$', '$']],
+                displayMath: [['\\[', '\\]'], ['$$', '$$']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
@@ -3695,14 +3701,8 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                     <div id="quiz-feedback-box" class="hidden mt-6 p-5 rounded-2xl border-2"></div>
                 `;
 
-                if (window.renderMathInElement) {
-                    renderMathInElement(document.getElementById('quiz-question-container'), {
-                        delimiters: [
-                            {left: '$$', right: '$$', display: true},
-                            {left: '\\\\(', right: '\\\\)', display: false},
-                            {left: '\\\\[', right: '\\\\]', display: true}
-                        ]
-                    });
+                if (window.MathJax) {
+                    MathJax.typesetPromise([document.getElementById('quiz-question-container')]).catch((err) => console.log(err.message));
                 }
 
                 const actionBtn = document.getElementById('btn-quiz-action');
@@ -3793,14 +3793,8 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                     `;
                 }
 
-                if (window.renderMathInElement) {
-                    renderMathInElement(feedbackBox, {
-                        delimiters: [
-                            {left: '$$', right: '$$', display: true},
-                            {left: '\\\\(', right: '\\\\)', display: false},
-                            {left: '\\\\[', right: '\\\\]', display: true}
-                        ]
-                    });
+                if (window.MathJax) {
+                    MathJax.typesetPromise([feedbackBox]).catch((err) => console.log(err.message));
                 }
 
                 const actionBtn = document.getElementById('btn-quiz-action');
@@ -3933,14 +3927,8 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                     resultsContainer.appendChild(revContainer);
                 }
 
-                if (window.renderMathInElement) {
-                    renderMathInElement(revContainer, {
-                        delimiters: [
-                            {left: '$$', right: '$$', display: true},
-                            {left: '\\(', right: '\\)', display: false},
-                            {left: '\\[', right: '\\]', display: true}
-                        ]
-                    });
+                if (window.MathJax) {
+                    MathJax.typesetPromise([revContainer]).catch((err) => console.log(err.message));
                 }
 
                 document.getElementById('practica-quiz').classList.add('hidden');
