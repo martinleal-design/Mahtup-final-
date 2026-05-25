@@ -1110,15 +1110,15 @@
                     generate() {
                         const grupo = ["A","B","C"][Math.floor(Math.random() * 3)];
                         return {
-                            text: `Tres diagramas de cajón (A, B y C) comparten el mismo Cuartil 1 (\\( Q_1 \\)), pero el Cuartil 3 (\\( Q_3 \\)) del grupo ${grupo} es menor que el de los demás. ¿Cuál argumento justifica que el RIC del grupo ${grupo} es menor?`,
+                            text: `Tres diagramas de cajón (A, B y C) comparten el mismo Cuartil 1 (\\\\( Q_1 \\\\)), pero el Cuartil 3 (\\\\( Q_3 \\\\)) del grupo ${grupo} es menor que el de los demás. ¿Cuál argumento justifica que el RIC del grupo ${grupo} es menor?`,
                             options: [
-                                `El \\( Q_1 \\) es el mismo para los tres grupos y el \\( Q_3 \\) de ${grupo} es menor.`,
+                                `El \\\\( Q_1 \\\\) es el mismo para los tres grupos y el \\\\( Q_3 \\\\) de ${grupo} es menor.`,
                                 `El rango (máximo − mínimo) de ${grupo} es menor.`,
                                 `La diferencia entre el percentil 75 y el valor máximo de ${grupo} es menor.`,
                                 `La mediana de ${grupo} es menor que la de los demás grupos.`
                             ],
                             correct: 0,
-                            explanation: `<b>Definición del RIC:</b> \\( RIC = Q_3 - Q_1 \\)<br><br><b>Dato del enunciado:</b> Los tres grupos tienen el <i>mismo</i> \\( Q_1 \\).<br><br><b>Análisis:</b><br>\\( RIC_{${grupo}} = Q_3^{(${grupo})} - Q_1 \\)<br>\\( RIC_{otros} = Q_3^{(otros)} - Q_1 \\)<br><br>Como \\( Q_1 \\) es constante, el grupo con menor \\( Q_3 \\) tendrá el menor RIC.<br><br>💡 <b>No confundir con el Rango Total</b> (máximo − mínimo): ese considera los extremos, <i>no</i> los cuartiles. El RIC solo mide la dispersión del 50% central de los datos.`
+                            explanation: `<b>Definición del RIC:</b> \\\\( RIC = Q_3 - Q_1 \\\\)<br><br><b>Dato del enunciado:</b> Los tres grupos tienen el <i>mismo</i> \\\\( Q_1 \\\\).<br><br><b>Análisis:</b><br>\\\\( RIC_{${grupo}} = Q_3^{(${grupo})} - Q_1 \\\\)<br>\\\\( RIC_{otros} = Q_3^{(otros)} - Q_1 \\\\)<br><br>Como \\\\( Q_1 \\\\) es constante, el grupo con menor \\\\( Q_3 \\\\) tendrá el menor RIC.<br><br>💡 <b>No confundir con el Rango Total</b> (máximo − mínimo): ese considera los extremos, <i>no</i> los cuartiles. El RIC solo mide la dispersión del 50% central de los datos.`
                         };
                     }
                 },
@@ -2498,7 +2498,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                             text: `En una carrera participan ${elem} caballos. Si solo importan los 3 primeros lugares (oro, plata, bronce), ¿cuántas combinaciones posibles de podio (variaciones sin repetición) se pueden formar?`,
                             options: [`${ans}`, `${elem*3}`, `1`, `${elem}`],
                             correct: 0,
-                            explanation: `<br><b>Paso 1:</b> Como importa el orden (los lugares del podio no dan lo mismo), usamos Variación.<br><b>Paso 2:</b> De forma rápida: para el 1° lugar hay ${elem} candidatos, para el 2° quedan ${elem-1}, y para el 3° quedan ${elem-2}.<br><b>Paso 3:</b> Se multiplican las opciones.<br><br>💡 <b>Total:</b> \\( ${elem} \\times ${elem-1} \\times ${elem-2} = ${ans} \\).`
+                            explanation: `<br><b>Paso 1:</b> Como importa el orden (los lugares del podio no dan lo mismo), usamos Variación.<br><b>Paso 2:</b> De forma rápida: para el 1° lugar hay ${elem} candidatos, para el 2° quedan ${elem-1}, y para el 3° quedan ${elem-2}.<br><b>Paso 3:</b> Se multiplican las opciones.<br><br>💡 <b>Total:</b> \\\\( ${elem} \\\\times ${elem-1} \\\\times ${elem-2} = ${ans} \\\\).`
                         };
                     }
                 },
@@ -3365,7 +3365,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
             const maxIngreso = a * (vX * vX) + b * vX + c; // I(vX)
             
             return {
-                text: `Los ingresos semanales de una marca (en miles de pesos) están modelados por \\( I(x) = ${a}x^2 + ${b}x ${c} \\), donde \\( x \\) representa la cantidad de polerones vendidos. ¿Cuál es la cantidad de polerones que maximiza los ingresos y a cuánto asciende dicho ingreso máximo?`,
+                text: `Los ingresos semanales de una marca (en miles de pesos) están modelados por \\\\( I(x) = ${a}x^2 + ${b}x ${c} \\\\), donde \\\\( x \\\\) representa la cantidad de polerones vendidos. ¿Cuál es la cantidad de polerones que maximiza los ingresos y a cuánto asciende dicho ingreso máximo?`,
                 options: [
                     `${vX} polerones, obteniendo $${(maxIngreso * 1000).toLocaleString('es-CL')}`,
                     `${vX * 2} polerones, obteniendo $${(maxIngreso * 1000).toLocaleString('es-CL')}`,
@@ -3373,7 +3373,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                     `${Math.floor(vX / 2)} polerones, obteniendo $${(maxIngreso * 1000).toLocaleString('es-CL')}`
                 ],
                 correct: 0,
-                explanation: `Para maximizar, buscamos el vértice. X = \\( \\frac{-b}{2a} = \\frac{-${b}}{2  ×  ${a}} = ${vX} \\) polerones. Evaluamos \\( I(${vX}) = ${a}(${vX})^2 + ${b}(${vX}) ${c} = ${maxIngreso} \\) miles de pesos, es decir, $${(maxIngreso * 1000).toLocaleString('es-CL')}.`
+                explanation: `Para maximizar, buscamos el vértice. X = \\\\( \\\\frac{-b}{2a} = \\\\frac{-${b}}{2  ×  ${a}} = ${vX} \\\\) polerones. Evaluamos \\\\( I(${vX}) = ${a}(${vX})^2 + ${b}(${vX}) ${c} = ${maxIngreso} \\\\) miles de pesos, es decir, $${(maxIngreso * 1000).toLocaleString('es-CL')}.`
             };
         }
     }
@@ -3709,8 +3709,8 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                     renderMathInElement(document.getElementById('quiz-question-container'), {
                         delimiters: [
                             {left: '$$', right: '$$', display: true},
-                            {left: '\\(', right: '\\)', display: false},
-                            {left: '\\[', right: '\\]', display: true}
+                            {left: '\\\\(', right: '\\\\)', display: false},
+                            {left: '\\\\[', right: '\\\\]', display: true}
                         ]
                     });
                 }
@@ -3807,8 +3807,8 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                     renderMathInElement(feedbackBox, {
                         delimiters: [
                             {left: '$$', right: '$$', display: true},
-                            {left: '\\(', right: '\\)', display: false},
-                            {left: '\\[', right: '\\]', display: true}
+                            {left: '\\\\(', right: '\\\\)', display: false},
+                            {left: '\\\\[', right: '\\\\]', display: true}
                         ]
                     });
                 }
@@ -4260,6 +4260,29 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
         };
 
         window.onload = () => app.init();
+    </script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyBxMZFRyy3CazGrym-HsWI3Zj2zfTMrl0w",
+            authDomain: "mathup-c938d.firebaseapp.com",
+            projectId: "mathup-c938d",
+            storageBucket: "mathup-c938d.firebasestorage.app",
+            messagingSenderId: "223876830441",
+            appId: "1:223876830441:web:65653415d150d4276f4c78",
+            measurementId: "G-QPN7K00VL0"
+        };
+
+        // Initialize Firebase
+        const app_fb = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app_fb);
     </script>
 </body>
 </html>
