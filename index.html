@@ -13,8 +13,8 @@
     <script>
         window.MathJax = {
             tex: {
-                inlineMath: [['\\(', '\\)'], ['$', '$']],
-                displayMath: [['\\[', '\\]'], ['$$', '$$']]
+                inlineMath: [['\\\\(', '\\\\)'], ['$', '$']],
+                displayMath: [['\\\\[', '\\\\]'], ['$$', '$$']]
             }
         };
     </script>
@@ -498,14 +498,19 @@
                 <p class="text-stone-600">Estadísticas calculadas en base a tu rendimiento en la plataforma.</p>
             </div>
 
-            <div class="bg-white p-8 rounded-3xl shadow-sm border border-stone-200 mb-8 flex flex-col sm:flex-row items-center sm:justify-start text-center sm:text-left">
-                <div class="w-20 h-20 bg-stone-900 text-white rounded-2xl flex items-center justify-center text-4xl font-bold mb-4 sm:mb-0 sm:mr-6 transform -rotate-3">
-                    &#x1F393;
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-stone-200 mb-8 flex flex-col sm:flex-row items-center justify-between text-center sm:text-left">
+                <div class="flex flex-col sm:flex-row items-center">
+                    <div class="w-20 h-20 bg-stone-900 text-white rounded-2xl flex items-center justify-center text-4xl font-bold mb-4 sm:mb-0 sm:mr-6 transform -rotate-3">
+                        &#x1F393;
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black text-stone-800" id="profile-email">Cargando...</h3>
+                        <p class="text-teal-600 font-bold text-sm tracking-wide uppercase mt-1">&#x2728; Pase Libre Activo</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-2xl font-black text-stone-800" id="profile-email">Cargando...</h3>
-                    <p class="text-teal-600 font-bold text-sm tracking-wide uppercase mt-1">&#x2728; Pase Libre Activo</p>
-                </div>
+                <button onclick="app.logout()" class="mt-6 sm:mt-0 px-6 py-3 bg-red-50 text-red-600 hover:bg-red-100 font-bold rounded-xl border border-red-200 transition-colors flex items-center shadow-sm">
+                    <span class="mr-2 text-lg">🚪</span> Cerrar Sesión
+                </button>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -3702,7 +3707,10 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                 `;
 
                 if (window.MathJax) {
-                    MathJax.typesetPromise([document.getElementById('quiz-question-container')]).catch((err) => console.log(err.message));
+                    setTimeout(() => {
+                        MathJax.typesetClear();
+                        MathJax.typesetPromise([document.getElementById('quiz-question-container')]).catch((err) => console.log(err));
+                    }, 50);
                 }
 
                 const actionBtn = document.getElementById('btn-quiz-action');
@@ -3794,7 +3802,10 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                 }
 
                 if (window.MathJax) {
-                    MathJax.typesetPromise([feedbackBox]).catch((err) => console.log(err.message));
+                    setTimeout(() => {
+                        MathJax.typesetClear();
+                        MathJax.typesetPromise([feedbackBox]).catch((err) => console.log(err));
+                    }, 50);
                 }
 
                 const actionBtn = document.getElementById('btn-quiz-action');
@@ -3928,7 +3939,10 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                 }
 
                 if (window.MathJax) {
-                    MathJax.typesetPromise([revContainer]).catch((err) => console.log(err.message));
+                    setTimeout(() => {
+                        MathJax.typesetClear();
+                        MathJax.typesetPromise([revContainer]).catch((err) => console.log(err));
+                    }, 50);
                 }
 
                 document.getElementById('practica-quiz').classList.add('hidden');
@@ -4243,7 +4257,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
     <script type="module">
         // 1. Importar herramientas de Firebase (¡Sumamos Firestore!)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
 
         // 2. TUS LLAVES MAESTRAS
@@ -4336,6 +4350,14 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                 if (contenidoPremium) contenidoPremium.classList.add('hidden');
             }
         });
+
+        if (window.app) {
+            window.app.logout = () => {
+                signOut(auth).then(() => {
+                    window.location.reload();
+                }).catch((error) => console.error(error));
+            };
+        }
     </script>
 </body>
 </html>
