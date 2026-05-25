@@ -123,7 +123,7 @@
                     </div>
                     <p id="login-error" class="text-red-500 text-sm hidden font-bold bg-red-50 p-3 rounded-lg">❌ Credenciales incorrectas. Intenta nuevamente.</p>
                     <div class="flex flex-col gap-3 mt-6">
-                        <button onclick="app.verifyEmail()" class="w-full bg-stone-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5">Iniciar Sesión</button>
+                        <button id="btn-login" class="w-full bg-stone-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5">Iniciar Sesión</button>
                         <button onclick="app.closeLoginModal(); app.openCheckoutModal()" class="w-full bg-white hover:bg-stone-50 text-stone-800 font-bold py-3.5 rounded-xl shadow-sm border-2 border-stone-200 transition-colors">Crear Cuenta</button>
                     </div>
                 </div>
@@ -135,36 +135,30 @@
                 <button onclick="app.closeCheckoutModal()" class="absolute top-4 right-5 text-stone-400 hover:text-stone-700 text-3xl leading-none">&times;</button>
                 <div class="text-center mb-6">
                     <span class="text-5xl inline-block mb-3">&#x1F4B3;</span>
-                    <h3 class="text-2xl font-black text-stone-900">Inscripción Premium</h3>
-                    <p class="text-stone-500 text-sm mt-2">Accede a simuladores infinitos, historial de progreso y laboratorios interactivos.</p>
-                    <div id="checkout-offer-div" class="mt-3 bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-xl text-sm font-bold animate-pulse">
-                        ¡OFERTA ÉPICA POR LANZAMIENTO!<br>
-                        <span class="line-through text-red-400 font-medium">$19.990</span> <span class="text-lg">Solo $9.990</span>
-                    </div>
+                    <h3 class="text-2xl font-black text-stone-900">Elige tu Plan Premium</h3>
+                    <p class="text-stone-500 text-sm mt-2">Desbloquea simuladores infinitos, historial de progreso y laboratorios interactivos.</p>
                 </div>
                 
-                <div class="flex gap-2 mb-4 justify-center">
-                    <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-lg text-xs font-bold border border-blue-200 flex items-center"><span class="mr-1">🤝</span> MercadoPago</span>
-                    <span class="px-3 py-1 bg-purple-50 text-purple-700 rounded-lg text-xs font-bold border border-purple-200">MACH</span>
-                    <span class="px-3 py-1 bg-green-50 text-green-700 rounded-lg text-xs font-bold border border-green-200">Transferencia</span>
-                </div>
                 <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-bold text-stone-700 mb-2">Correo de Inscripción</label>
-                        <input type="email" id="checkout-email" placeholder="tu@correo.com" class="w-full border-stone-300 rounded-xl p-3 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 border bg-stone-50 outline-none transition-shadow font-medium">
+                    <div class="border-2 border-amber-400 bg-amber-50 rounded-2xl p-4 cursor-pointer hover:bg-amber-100 transition-colors" onclick="window.location.href='https://www.flow.cl/btn.php?token=x9b7891a094c153f8c0f610c0b631279a0149468'">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-black text-amber-900 text-lg">Plan Mensual</h4>
+                            <span class="bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full">OFERTA</span>
+                        </div>
+                        <div class="text-sm text-amber-700 mb-2">Acceso total por 30 días.</div>
+                        <div class="font-black text-2xl text-amber-900">$9.990 <span class="text-sm line-through text-amber-600 font-medium">$19.990</span></div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-bold text-stone-700 mb-2">Método de Pago (Simulado)</label>
-                        <select class="w-full border-stone-300 rounded-xl p-3 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 border bg-stone-50 outline-none transition-shadow font-medium">
-                            <option>Tarjeta de Crédito / Débito</option>
-                            <option>MercadoPago (Dinero en cuenta)</option>
-                            <option>Cuenta MACH</option>
-                            <option>Transferencia Bancaria</option>
-                        </select>
+
+                    <div class="border-2 border-stone-200 bg-white rounded-2xl p-4 cursor-pointer hover:bg-stone-50 transition-colors" onclick="window.location.href='#'">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-black text-stone-900 text-lg">Plan Anual</h4>
+                            <span class="bg-stone-200 text-stone-600 text-xs font-bold px-2 py-1 rounded-full">RECOMENDADO</span>
+                        </div>
+                        <div class="text-sm text-stone-500 mb-2">Preparación intensiva hasta la PAES.</div>
+                        <div class="font-black text-2xl text-stone-900">$69.990 <span class="text-sm line-through text-stone-400 font-medium">$119.880</span></div>
                     </div>
-                    <p id="checkout-success" class="text-green-600 text-sm hidden font-bold bg-green-50 p-3 rounded-lg">✅ ¡Pago exitoso! Ingresando a tu cuenta...</p>
-                    <p id="checkout-error" class="text-red-500 text-sm hidden font-bold bg-red-50 p-3 rounded-lg">❌ Por favor ingresa un correo válido.</p>
-                    <button id="checkout-pay-btn" onclick="app.processPayment()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3.5 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5">Pagar $9.990</button>
+                    
+                    <p class="text-xs text-center text-stone-500 mt-4">Serás redirigido a Flow para pagar de forma segura. Al pagar, tu correo quedará registrado como usuario Premium. <br><br>¿Ya tienes cuenta? <a href="#" onclick="app.closeCheckoutModal(); app.openLoginModal(); event.preventDefault();" class="text-teal-600 font-bold hover:underline">Inicia Sesión aquí</a>.</p>
                 </div>
             </div>
         </div>
