@@ -4253,11 +4253,12 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
         window.onload = () => app.init();
     </script>
     <script type="module">
-        // 1. Importar las herramientas de Firebase (¡Agregamos onAuthStateChanged!)
+        // 1. Importar herramientas de Firebase (¡Sumamos Firestore!)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
 
-        // 2. TUS LLAVES MAESTRAS 
+        // 2. TUS LLAVES MAESTRAS
         const firebaseConfig = {
             apiKey: "AIzaSyBxMZFRyy3CazGrym-HsWI3Zj2zfTMrl0w",
             authDomain: "mathup-c938d.firebaseapp.com",
@@ -4270,63 +4271,79 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
 
         const app_fb = initializeApp(firebaseConfig);
         const auth = getAuth(app_fb);
+        const db = getFirestore(app_fb); // Inicializamos la base de datos
 
-        // 3. Capturar elementos del Login
+        // 3. Capturar elementos de la interfaz
         const btnLogin = document.getElementById('btn-login');
         const emailInput = document.getElementById('login-email');
         const passwordInput = document.getElementById('login-password');
         const errorMsg = document.getElementById('login-error');
-
-        // 4. Capturar las grandes secciones de tu página
-        // Vinculamos tu 'muro-de-pago' y 'contenido-premium' a las secciones que ya existen
         const muroDePago = document.getElementById('view-home');
         const contenidoPremium = document.getElementById('view-practica');
 
-        // 5. Función del Botón Iniciar Sesión
+        // 4. Lógica del botón de Iniciar Sesión
         btnLogin.addEventListener('click', () => {
             const email = emailInput.value.trim().toLowerCase();
             const password = passwordInput.value;
 
             signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    // El login es correcto. Cerramos la ventana.
+                .then(() => {
                     document.getElementById('login-modal').classList.add('hidden');
                     errorMsg.classList.add('hidden');
                 })
                 .catch((error) => {
-                    console.error("Error:", error.message);
+                    console.error("Error de acceso:", error.message);
                     errorMsg.classList.remove('hidden');
                 });
         });
 
-        // 6. EL GUARDIÁN (Vigila la memoria 24/7)
-        onAuthStateChanged(auth, (user) => {
+        // 5. EL GUARDIÁN INTELIGENTE (Calcula accesos y fechas 24/7)
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Si el alumno está logueado (tiene la llave)
-                console.log("Usuario activo en el sistema:", user.email);
-                
-                // Autorización Premium para tu App
-                if (window.app) {
-                    window.app.isPremium = true;
-                    window.app.loggedEmail = user.email;
-                    // Asegurarnos de que el menú cambia a Premium (ej. muestra el perfil)
-                    const savedStats = localStorage.getItem(`mathup_user_${user.email}`);
-                    if (savedStats) window.app.userStats = JSON.parse(savedStats);
-                    window.app.updateProfileUI();
+                try {
+                    // Buscamos el documento del alumno en la colección "usuarios" usando su correo
+                    const docRef = doc(db, "usuarios", user.email);
+                    const docSnap = await getDoc(docRef);
+
+                    if (docSnap.exists()) {
+                        const datosUsuario = docSnap.data();
+                        
+                        // Obtenemos la fecha de hoy en formato estándar chileno (YYYY-MM-DD)
+                        const hoy = new Date().toISOString().split('T')[0];
+
+                        // Verificamos matemáticamente si su estado es Premium y si no ha vencido
+                        if (datosUsuario.estado === "Premium" && datosUsuario.fecha_vencimiento >= hoy) {
+                            console.log("Acceso Premium verificado. Vence el:", datosUsuario.fecha_vencimiento);
+                            
+                            // Autorización Premium para tu App (Esencial para que el menú superior funcione)
+                            if (window.app) {
+                                window.app.isPremium = true;
+                                window.app.loggedEmail = user.email;
+                                const savedStats = localStorage.getItem(`mathup_user_${user.email}`);
+                                if (savedStats) window.app.userStats = JSON.parse(savedStats);
+                                window.app.updateProfileUI();
+                            }
+
+                            // Damos paso libre a los simuladores
+                            if (muroDePago) muroDePago.classList.add('hidden');
+                            if (contenidoPremium) contenidoPremium.classList.remove('hidden');
+                            return; 
+                        }
+                    }
+                    
+                    // Si el documento no existe o la fecha de vencimiento ya pasó:
+                    console.log("Suscripción inactiva o vencida.");
+                    if (window.app) window.app.isPremium = false;
+                    if (muroDePago) muroDePago.classList.remove('hidden');
+                    if (contenidoPremium) contenidoPremium.classList.add('hidden');
+
+                } catch (error) {
+                    console.error("Error al consultar los permisos en la base de datos:", error);
                 }
-
-                // Ocultamos la publicidad/precios y mostramos la materia
-                if (muroDePago) muroDePago.classList.add('hidden');
-                if (contenidoPremium) contenidoPremium.classList.remove('hidden');
-                
             } else {
-                // Si nadie ha iniciado sesión (o si cerraron sesión)
+                // Si no hay ningún usuario con la sesión activa
                 console.log("No hay usuarios activos");
-                
-                // Quitamos permisos en la app local si se desloguea
                 if (window.app) window.app.isPremium = false;
-
-                // Mostramos los precios y bloqueamos la materia
                 if (muroDePago) muroDePago.classList.remove('hidden');
                 if (contenidoPremium) contenidoPremium.classList.add('hidden');
             }
