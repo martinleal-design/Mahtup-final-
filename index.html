@@ -4253,11 +4253,11 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
         window.onload = () => app.init();
     </script>
     <script type="module">
-        // 1. Importar las herramientas de Firebase
+        // 1. Importar las herramientas de Firebase (¡Agregamos onAuthStateChanged!)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
 
-        // 2. TUS LLAVES MAESTRAS
+        // 2. TUS LLAVES MAESTRAS 
         const firebaseConfig = {
             apiKey: "AIzaSyBxMZFRyy3CazGrym-HsWI3Zj2zfTMrl0w",
             authDomain: "mathup-c938d.firebaseapp.com",
@@ -4268,40 +4268,68 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
             measurementId: "G-QPN7K00VL0"
         };
 
-        // 3. Inicializar el sistema
         const app_fb = initializeApp(firebaseConfig);
         const auth = getAuth(app_fb);
 
-        // 4. Capturar los elementos de tu diseño
+        // 3. Capturar elementos del Login
         const btnLogin = document.getElementById('btn-login');
         const emailInput = document.getElementById('login-email');
         const passwordInput = document.getElementById('login-password');
         const errorMsg = document.getElementById('login-error');
 
-        // 5. La magia: ¿Qué pasa al hacer clic en Iniciar Sesión?
+        // 4. Capturar las grandes secciones de tu página
+        // Vinculamos tu 'muro-de-pago' y 'contenido-premium' a las secciones que ya existen
+        const muroDePago = document.getElementById('view-home');
+        const contenidoPremium = document.getElementById('view-practica');
+
+        // 5. Función del Botón Iniciar Sesión
         btnLogin.addEventListener('click', () => {
             const email = emailInput.value.trim().toLowerCase();
             const password = passwordInput.value;
 
-            // Firebase intenta abrir la bóveda con esos datos
             signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
-                    // ¡ÉXITO! La contraseña es correcta
-                    alert("¡Bienvenido a MATHUP Premium!");
-                    errorMsg.classList.add('hidden'); // Oculta el mensaje de error si estaba visible
-                    document.getElementById('login-modal').classList.add('hidden'); // Cierra la ventana
-                    
-                    // Autorización simulada para acceso premium local
-                    if (window.app && typeof window.app.verifyEmail === 'function') {
-                        if (!window.app.allowedEmails.includes(email)) window.app.allowedEmails.push(email);
-                        window.app.verifyEmail();
-                    }
+                    // El login es correcto. Cerramos la ventana.
+                    document.getElementById('login-modal').classList.add('hidden');
+                    errorMsg.classList.add('hidden');
                 })
                 .catch((error) => {
-                    // ERROR: Contraseña mala o correo no existe
-                    console.error("Error de Firebase:", error.message);
-                    errorMsg.classList.remove('hidden'); // Muestra el texto rojo de error
+                    console.error("Error:", error.message);
+                    errorMsg.classList.remove('hidden');
                 });
+        });
+
+        // 6. EL GUARDIÁN (Vigila la memoria 24/7)
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Si el alumno está logueado (tiene la llave)
+                console.log("Usuario activo en el sistema:", user.email);
+                
+                // Autorización Premium para tu App
+                if (window.app) {
+                    window.app.isPremium = true;
+                    window.app.loggedEmail = user.email;
+                    // Asegurarnos de que el menú cambia a Premium (ej. muestra el perfil)
+                    const savedStats = localStorage.getItem(`mathup_user_${user.email}`);
+                    if (savedStats) window.app.userStats = JSON.parse(savedStats);
+                    window.app.updateProfileUI();
+                }
+
+                // Ocultamos la publicidad/precios y mostramos la materia
+                if (muroDePago) muroDePago.classList.add('hidden');
+                if (contenidoPremium) contenidoPremium.classList.remove('hidden');
+                
+            } else {
+                // Si nadie ha iniciado sesión (o si cerraron sesión)
+                console.log("No hay usuarios activos");
+                
+                // Quitamos permisos en la app local si se desloguea
+                if (window.app) window.app.isPremium = false;
+
+                // Mostramos los precios y bloqueamos la materia
+                if (muroDePago) muroDePago.classList.remove('hidden');
+                if (contenidoPremium) contenidoPremium.classList.add('hidden');
+            }
         });
     </script>
 </body>
