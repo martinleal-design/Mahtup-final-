@@ -149,7 +149,7 @@
                         <div class="font-black text-2xl text-amber-900">$9.990 <span class="text-sm line-through text-amber-600 font-medium">$19.990</span></div>
                     </div>
 
-                    <div class="border-2 border-stone-200 bg-white rounded-2xl p-4 cursor-pointer hover:bg-stone-50 transition-colors" onclick="window.location.href='#'">
+                    <div class="border-2 border-stone-200 bg-white rounded-2xl p-4 cursor-pointer hover:bg-stone-50 transition-colors" onclick="window.location.href='https://www.flow.cl/btn.php?token=h8aa76c6a703379332dcf8df68a286bff83357da'">
                         <div class="flex justify-between items-center mb-2">
                             <h4 class="font-black text-stone-900 text-lg">Plan Anual</h4>
                             <span class="bg-stone-200 text-stone-600 text-xs font-bold px-2 py-1 rounded-full">RECOMENDADO</span>
@@ -158,7 +158,7 @@
                         <div class="font-black text-2xl text-stone-900">$69.990 <span class="text-sm line-through text-stone-400 font-medium">$119.880</span></div>
                     </div>
                     
-                    <p class="text-xs text-center text-stone-500 mt-4">Serás redirigido a Flow para pagar de forma segura. Al pagar, tu correo quedará registrado como usuario Premium. <br><br>¿Ya tienes cuenta? <a href="#" onclick="app.closeCheckoutModal(); app.openLoginModal(); event.preventDefault();" class="text-teal-600 font-bold hover:underline">Inicia Sesión aquí</a>.</p>
+                    <p class="text-xs text-center text-stone-500 mt-4">Serás redirigido a Flow para pagar de forma segura. Al pagar, tu correo quedará registrado como usuario Premium. <br><br>¿Ya tienes cuenta? <a href="javascript:void(0)" onclick="app.closeCheckoutModal(); app.openLoginModal();" class="text-teal-600 font-bold hover:underline">Inicia Sesión aquí</a>.</p>
                 </div>
             </div>
         </div>
@@ -3552,24 +3552,13 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
             },
 
             // --- PAGO SIMULADO ---
-            openCheckoutModal(plan = 'mensual') { 
-                const offerDiv = document.getElementById('checkout-offer-div');
-                const payBtn = document.getElementById('checkout-pay-btn');
-                
-                if (plan === 'anual') {
-                    offerDiv.innerHTML = `¡OFERTA ANUAL!<br><span class="line-through text-red-400 font-medium">$119.880</span> <span class="text-lg">Solo $69.990</span>`;
-                    payBtn.innerText = `Pagar $69.990`;
-                } else {
-                    offerDiv.innerHTML = `¡OFERTA ÉPICA POR LANZAMIENTO!<br><span class="line-through text-red-400 font-medium">$49.990</span> <span class="text-lg">Solo $9.990</span>`;
-                    payBtn.innerText = `Pagar $9.990`;
-                }
-                
+            openCheckoutModal() { 
                 document.getElementById('checkout-modal').classList.remove('hidden'); 
             },
             closeCheckoutModal() { 
                 document.getElementById('checkout-modal').classList.add('hidden'); 
-                document.getElementById('checkout-error').classList.add('hidden');
-                document.getElementById('checkout-success').classList.add('hidden');
+                document.getElementById('checkout-error')?.classList.add('hidden');
+                document.getElementById('checkout-success')?.classList.add('hidden');
             },
             processPayment() {
                 const email = document.getElementById('checkout-email').value.trim().toLowerCase();
@@ -3577,7 +3566,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                     document.getElementById('checkout-error').classList.remove('hidden');
                     return;
                 }
-                document.getElementById('checkout-error').classList.add('hidden');
+                document.getElementById('checkout-error')?.classList.add('hidden');
                 document.getElementById('checkout-success').classList.remove('hidden');
                 
                 // Simular validación de tarjeta y acceso
@@ -3588,7 +3577,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                     this.isPremium = true;
                     this.loggedEmail = email;
                     this.closeCheckoutModal();
-                    document.getElementById('checkout-success').classList.add('hidden');
+                    document.getElementById('checkout-success')?.classList.add('hidden');
                     
                     document.getElementById('nav-practica').innerHTML = 'Práctica';
                     document.getElementById('nav-perfil').classList.remove('hidden');
@@ -4260,17 +4249,15 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
             }
         };
 
+        window.app = app;
         window.onload = () => app.init();
     </script>
     <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
+        // 1. Importar las herramientas de Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
 
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        // 2. TUS LLAVES MAESTRAS
         const firebaseConfig = {
             apiKey: "AIzaSyBxMZFRyy3CazGrym-HsWI3Zj2zfTMrl0w",
             authDomain: "mathup-c938d.firebaseapp.com",
@@ -4281,9 +4268,41 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
             measurementId: "G-QPN7K00VL0"
         };
 
-        // Initialize Firebase
+        // 3. Inicializar el sistema
         const app_fb = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app_fb);
+        const auth = getAuth(app_fb);
+
+        // 4. Capturar los elementos de tu diseño
+        const btnLogin = document.getElementById('btn-login');
+        const emailInput = document.getElementById('login-email');
+        const passwordInput = document.getElementById('login-password');
+        const errorMsg = document.getElementById('login-error');
+
+        // 5. La magia: ¿Qué pasa al hacer clic en Iniciar Sesión?
+        btnLogin.addEventListener('click', () => {
+            const email = emailInput.value.trim().toLowerCase();
+            const password = passwordInput.value;
+
+            // Firebase intenta abrir la bóveda con esos datos
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // ¡ÉXITO! La contraseña es correcta
+                    alert("¡Bienvenido a MATHUP Premium!");
+                    errorMsg.classList.add('hidden'); // Oculta el mensaje de error si estaba visible
+                    document.getElementById('login-modal').classList.add('hidden'); // Cierra la ventana
+                    
+                    // Autorización simulada para acceso premium local
+                    if (window.app && typeof window.app.verifyEmail === 'function') {
+                        if (!window.app.allowedEmails.includes(email)) window.app.allowedEmails.push(email);
+                        window.app.verifyEmail();
+                    }
+                })
+                .catch((error) => {
+                    // ERROR: Contraseña mala o correo no existe
+                    console.error("Error de Firebase:", error.message);
+                    errorMsg.classList.remove('hidden'); // Muestra el texto rojo de error
+                });
+        });
     </script>
 </body>
 </html>
