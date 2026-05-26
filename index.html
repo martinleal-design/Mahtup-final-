@@ -13,8 +13,8 @@
     <script>
         window.MathJax = {
             tex: {
-                inlineMath: [['\\\\(', '\\\\)'], ['$', '$']],
-                displayMath: [['\\\\[', '\\\\]'], ['$$', '$$']]
+                inlineMath: [['\\(', '\\)'], ['$', '$']],
+                displayMath: [['\\[', '\\]'], ['$$', '$$']]
             }
         };
     </script>
@@ -552,7 +552,153 @@
 
             <div class="space-y-8">
                 
-                <!-- Teorema de Pitágoras (SVG Dinámico) -->
+                
+                <!-- Módulo 1: Máquina de Fracciones -->
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-stone-200">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="text-2xl bg-amber-50 text-amber-600 p-2 rounded-xl">🔢</span>
+                        <h3 class="text-2xl font-bold text-stone-800">Máquina de Fracciones</h3>
+                    </div>
+                    
+                    <div class="flex flex-col md:flex-row gap-10 items-center">
+                        <div class="w-full md:w-1/2 space-y-6">
+                            <p class="text-stone-500 text-sm">Ajusta los numeradores y denominadores para ver visualmente cómo se suman o multiplican dos fracciones.</p>
+                            
+                            <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200 space-y-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-stone-700 mb-1">Fracción 1: <span id="frac1-val">1/2</span></label>
+                                    <div class="flex gap-4">
+                                        <input type="range" id="frac1-num" min="1" max="10" value="1" class="w-1/2 accent-amber-500" oninput="updateFracciones()">
+                                        <input type="range" id="frac1-den" min="1" max="10" value="2" class="w-1/2 accent-amber-500" oninput="updateFracciones()">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-stone-700 mb-1">Fracción 2: <span id="frac2-val">1/3</span></label>
+                                    <div class="flex gap-4">
+                                        <input type="range" id="frac2-num" min="1" max="10" value="1" class="w-1/2 accent-blue-500" oninput="updateFracciones()">
+                                        <input type="range" id="frac2-den" min="1" max="10" value="3" class="w-1/2 accent-blue-500" oninput="updateFracciones()">
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-4 mt-4">
+                                    <button onclick="setFracOp('suma')" id="btn-frac-suma" class="flex-1 bg-stone-900 text-white py-2 rounded-lg font-bold">Suma</button>
+                                    <button onclick="setFracOp('mult')" id="btn-frac-mult" class="flex-1 bg-stone-200 text-stone-700 py-2 rounded-lg font-bold hover:bg-stone-300">Multiplicación</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full md:w-1/2 bg-stone-100 rounded-3xl p-6 flex flex-col items-center justify-center min-h-[300px]">
+                            <svg id="svg-fracciones" width="100%" height="200" viewBox="0 0 300 200" class="drop-shadow-sm"></svg>
+                            <div id="frac-resultado-texto" class="mt-4 text-xl font-bold text-stone-800"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Módulo 2: Simulador de Funciones -->
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-stone-200">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="text-2xl bg-indigo-50 text-indigo-600 p-2 rounded-xl">📈</span>
+                        <h3 class="text-2xl font-bold text-stone-800">Simulador de Funciones</h3>
+                    </div>
+                    
+                    <div class="flex flex-col md:flex-row gap-10 items-center">
+                        <div class="w-full md:w-1/2 space-y-6">
+                            <p class="text-stone-500 text-sm">Explora las funciones afín (recta) y cuadrática (parábola). Modifica los coeficientes y observa el cambio en el plano cartesiano.</p>
+                            
+                            <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200">
+                                <select id="func-tipo" class="w-full mb-4 p-2 rounded-lg border border-stone-300 font-bold" onchange="updateFunciones()">
+                                    <option value="cuadratica">Función Cuadrática: y = ax² + bx + c</option>
+                                    <option value="afin">Función Afín: y = mx + n</option>
+                                </select>
+                                
+                                <div id="cont-func-a" class="mb-4">
+                                    <label class="block text-sm font-bold text-stone-700 mb-1">Coeficiente a (o m): <span id="func-a-val">1</span></label>
+                                    <input type="range" id="func-a" min="-5" max="5" step="0.5" value="1" class="w-full accent-indigo-500" oninput="updateFunciones()">
+                                </div>
+                                <div id="cont-func-b" class="mb-4">
+                                    <label class="block text-sm font-bold text-stone-700 mb-1">Coeficiente b: <span id="func-b-val">0</span></label>
+                                    <input type="range" id="func-b" min="-5" max="5" step="0.5" value="0" class="w-full accent-indigo-500" oninput="updateFunciones()">
+                                </div>
+                                <div id="cont-func-c" class="mb-4">
+                                    <label class="block text-sm font-bold text-stone-700 mb-1">Coeficiente c (o n): <span id="func-c-val">0</span></label>
+                                    <input type="range" id="func-c" min="-5" max="5" step="0.5" value="0" class="w-full accent-indigo-500" oninput="updateFunciones()">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full md:w-1/2 bg-stone-100 rounded-3xl p-6 flex flex-col items-center justify-center min-h-[300px]">
+                            <svg id="svg-funciones" width="100%" height="250" viewBox="-10 -10 20 20" class="drop-shadow-sm bg-white rounded-xl border border-stone-200"></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Módulo 3: Pizarra Vectorial -->
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-stone-200">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="text-2xl bg-rose-50 text-rose-600 p-2 rounded-xl">↗️</span>
+                        <h3 class="text-2xl font-bold text-stone-800">Pizarra Vectorial</h3>
+                    </div>
+                    
+                    <div class="flex flex-col md:flex-row gap-10 items-center">
+                        <div class="w-full md:w-1/2 space-y-6">
+                            <p class="text-stone-500 text-sm">Visualiza vectores en 2D, su módulo (longitud) y las operaciones de adición y sustracción.</p>
+                            
+                            <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200 space-y-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-stone-700 mb-1 text-rose-600">Vector U (x, y)</label>
+                                    <div class="flex gap-4">
+                                        <input type="range" id="vec-u-x" min="-10" max="10" value="3" class="w-1/2 accent-rose-500" oninput="updateVectores()">
+                                        <input type="range" id="vec-u-y" min="-10" max="10" value="4" class="w-1/2 accent-rose-500" oninput="updateVectores()">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-stone-700 mb-1 text-blue-600">Vector V (x, y)</label>
+                                    <div class="flex gap-4">
+                                        <input type="range" id="vec-v-x" min="-10" max="10" value="2" class="w-1/2 accent-blue-500" oninput="updateVectores()">
+                                        <input type="range" id="vec-v-y" min="-10" max="10" value="-3" class="w-1/2 accent-blue-500" oninput="updateVectores()">
+                                    </div>
+                                </div>
+                                
+                                <div class="flex gap-4 mt-4">
+                                    <button onclick="setVecOp('suma')" id="btn-vec-suma" class="flex-1 bg-stone-900 text-white py-2 rounded-lg font-bold">U + V</button>
+                                    <button onclick="setVecOp('resta')" id="btn-vec-resta" class="flex-1 bg-stone-200 text-stone-700 py-2 rounded-lg font-bold hover:bg-stone-300">U - V</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full md:w-1/2 bg-stone-100 rounded-3xl p-6 flex flex-col items-center justify-center min-h-[300px]">
+                            <svg id="svg-vectores" width="100%" height="250" viewBox="-12 -12 24 24" class="drop-shadow-sm bg-white rounded-xl border border-stone-200"></svg>
+                            <div id="vec-resultado-texto" class="mt-4 text-sm font-bold text-stone-800 space-y-1 text-center"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Módulo 4: Teoría de Conjuntos -->
+                <div class="bg-white rounded-3xl p-8 shadow-sm border border-stone-200">
+                    <div class="flex items-center gap-3 mb-6">
+                        <span class="text-2xl bg-emerald-50 text-emerald-600 p-2 rounded-xl">⭕</span>
+                        <h3 class="text-2xl font-bold text-stone-800">Teoría de Conjuntos</h3>
+                    </div>
+                    
+                    <div class="flex flex-col md:flex-row gap-10 items-center">
+                        <div class="w-full md:w-1/2 space-y-6">
+                            <p class="text-stone-500 text-sm">Explora las operaciones fundamentales de probabilidad y estadística con Diagramas de Venn interactivos.</p>
+                            
+                            <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200 grid grid-cols-2 gap-3">
+                                <button onclick="setConjuntoOp('union')" id="btn-conj-union" class="bg-stone-900 text-white py-3 rounded-xl font-bold shadow-sm">A ∪ B (Unión)</button>
+                                <button onclick="setConjuntoOp('interseccion')" id="btn-conj-interseccion" class="bg-white text-stone-800 border-2 border-stone-200 hover:border-stone-400 py-3 rounded-xl font-bold shadow-sm transition-colors">A ∩ B (Intersección)</button>
+                                <button onclick="setConjuntoOp('restaA')" id="btn-conj-restaA" class="bg-white text-stone-800 border-2 border-stone-200 hover:border-stone-400 py-3 rounded-xl font-bold shadow-sm transition-colors">A - B</button>
+                                <button onclick="setConjuntoOp('restaB')" id="btn-conj-restaB" class="bg-white text-stone-800 border-2 border-stone-200 hover:border-stone-400 py-3 rounded-xl font-bold shadow-sm transition-colors">B - A</button>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full md:w-1/2 bg-stone-100 rounded-3xl p-6 flex flex-col items-center justify-center min-h-[300px]">
+                            <svg id="svg-conjuntos" width="100%" height="250" viewBox="0 0 300 200" class="drop-shadow-sm"></svg>
+                            <div id="conj-resultado-texto" class="mt-4 text-lg font-bold text-stone-800 text-center"></div>
+                        </div>
+                    </div>
+                </div>
+<!-- Teorema de Pitágoras (SVG Dinámico) -->
                 <div class="bg-white rounded-3xl p-8 shadow-sm border border-stone-200">
                     <div class="flex items-center gap-3 mb-6">
                         <span class="text-2xl bg-teal-50 text-teal-600 p-2 rounded-xl">&#x25E2;</span>
@@ -1122,15 +1268,15 @@
                     generate() {
                         const grupo = ["A","B","C"][Math.floor(Math.random() * 3)];
                         return {
-                            text: `Tres diagramas de cajón (A, B y C) comparten el mismo Cuartil 1 (\\\\( Q_1 \\\\)), pero el Cuartil 3 (\\\\( Q_3 \\\\)) del grupo ${grupo} es menor que el de los demás. ¿Cuál argumento justifica que el RIC del grupo ${grupo} es menor?`,
+                            text: `Tres diagramas de cajón (A, B y C) comparten el mismo Cuartil 1 (\\( Q_1 \\)), pero el Cuartil 3 (\\( Q_3 \\)) del grupo ${grupo} es menor que el de los demás. ¿Cuál argumento justifica que el RIC del grupo ${grupo} es menor?`,
                             options: [
-                                `El \\\\( Q_1 \\\\) es el mismo para los tres grupos y el \\\\( Q_3 \\\\) de ${grupo} es menor.`,
+                                `El \\( Q_1 \\) es el mismo para los tres grupos y el \\( Q_3 \\) de ${grupo} es menor.`,
                                 `El rango (máximo − mínimo) de ${grupo} es menor.`,
                                 `La diferencia entre el percentil 75 y el valor máximo de ${grupo} es menor.`,
                                 `La mediana de ${grupo} es menor que la de los demás grupos.`
                             ],
                             correct: 0,
-                            explanation: `<b>Definición del RIC:</b> \\\\( RIC = Q_3 - Q_1 \\\\)<br><br><b>Dato del enunciado:</b> Los tres grupos tienen el <i>mismo</i> \\\\( Q_1 \\\\).<br><br><b>Análisis:</b><br>\\\\( RIC_{${grupo}} = Q_3^{(${grupo})} - Q_1 \\\\)<br>\\\\( RIC_{otros} = Q_3^{(otros)} - Q_1 \\\\)<br><br>Como \\\\( Q_1 \\\\) es constante, el grupo con menor \\\\( Q_3 \\\\) tendrá el menor RIC.<br><br>💡 <b>No confundir con el Rango Total</b> (máximo − mínimo): ese considera los extremos, <i>no</i> los cuartiles. El RIC solo mide la dispersión del 50% central de los datos.`
+                            explanation: `<b>Definición del RIC:</b> \\( RIC = Q_3 - Q_1 \\)<br><br><b>Dato del enunciado:</b> Los tres grupos tienen el <i>mismo</i> \\( Q_1 \\).<br><br><b>Análisis:</b><br>\\( RIC_{${grupo}} = Q_3^{(${grupo})} - Q_1 \\)<br>\\( RIC_{otros} = Q_3^{(otros)} - Q_1 \\)<br><br>Como \\( Q_1 \\) es constante, el grupo con menor \\( Q_3 \\) tendrá el menor RIC.<br><br>💡 <b>No confundir con el Rango Total</b> (máximo − mínimo): ese considera los extremos, <i>no</i> los cuartiles. El RIC solo mide la dispersión del 50% central de los datos.`
                         };
                     }
                 },
@@ -1933,7 +2079,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
 <b>Paso 3:</b> Sumamos ambas ecuaciones hacia abajo. Las B se anulan:
 \\[ (${ctx.valA} - ${ctx.valB})A = ${totalVal} - ${ctx.valB * totalItems} \\]
 \\[ ${ctx.valA - ctx.valB}A = ${totalVal - (ctx.valB * totalItems)} \\]
-<br>💡 <b>Resultado:</b> Despejando A obtenemos \( A = ${cantA} \).`
+<br>💡 <b>Resultado:</b> Despejando A obtenemos \\( A = ${cantA} \\).`
                         };
                     }
                 },
@@ -1999,7 +2145,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                             text: `En un día de invierno en ${ctx.ciudad}, la temperatura mínima fue de ${ctx.temp1}°C a las 06:00 am, y la máxima fue de ${ctx.temp2}°C a las 15:00 hrs. ¿Cuál fue la variación de temperatura durante ese período?`,
                             options: [`${dif}°C`, `${ctx.temp1 + ctx.temp2}°C`, `${Math.abs(ctx.temp1)}°C`, `${ctx.temp2}°C`],
                             correct: 0,
-                            explanation: `<br><b>Paso 1:</b> La variación térmica siempre es la diferencia entre el estado final y el inicial.<br><b>Paso 2:</b> Anotamos la fórmula: \( \Delta T = T_{\text{final}} - T_{\text{inicial}} \).<br><b>Paso 3:</b> Reemplazamos los datos: tu temperatura final es ${ctx.temp2}°C y la inicial es ${ctx.temp1}°C.<br><br>💡 <b>Cálculo:</b> \( ${ctx.temp2} - (${ctx.temp1}) = ${ctx.temp2} + ${Math.abs(ctx.temp1)} = ${dif}^\circ\text{C} \).`
+                            explanation: `<br><b>Paso 1:</b> La variación térmica siempre es la diferencia entre el estado final y el inicial.<br><b>Paso 2:</b> Anotamos la fórmula: \\( \Delta T = T_{\\text{final}} - T_{\\text{inicial}} \\).<br><b>Paso 3:</b> Reemplazamos los datos: tu temperatura final es ${ctx.temp2}°C y la inicial es ${ctx.temp1}°C.<br><br>💡 <b>Cálculo:</b> \\( ${ctx.temp2} - (${ctx.temp1}) = ${ctx.temp2} + ${Math.abs(ctx.temp1)} = ${dif}^\\circ\\text{C} \\).`
                         };
                     }
                 },
@@ -2412,7 +2558,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                     exam: "M2", topic: "Geometría", unit: "Rectas en el plano", difficulty: "Medio",
                     generate() {
                         const m = Math.floor(Math.random() * 4) + 2;
-                        const inv = `-\frac{1}{${m}}`;
+                        const inv = `-\\frac{1}{${m}}`;
                         return {
                             text: `Dada la recta L1 cuya ecuación es y = ${m}x + 3. ¿Cuál debe ser la pendiente de la recta L2 para que L1 y L2 sean PERPENDICULARES?`,
                             options: [`\\( -\\frac{1}{${m}} \\)`, `${m}`, `\\( \\frac{1}{${m}} \\)`, `-${m}`],
@@ -2510,7 +2656,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                             text: `En una carrera participan ${elem} caballos. Si solo importan los 3 primeros lugares (oro, plata, bronce), ¿cuántas combinaciones posibles de podio (variaciones sin repetición) se pueden formar?`,
                             options: [`${ans}`, `${elem*3}`, `1`, `${elem}`],
                             correct: 0,
-                            explanation: `<br><b>Paso 1:</b> Como importa el orden (los lugares del podio no dan lo mismo), usamos Variación.<br><b>Paso 2:</b> De forma rápida: para el 1° lugar hay ${elem} candidatos, para el 2° quedan ${elem-1}, y para el 3° quedan ${elem-2}.<br><b>Paso 3:</b> Se multiplican las opciones.<br><br>💡 <b>Total:</b> \\\\( ${elem} \\\\times ${elem-1} \\\\times ${elem-2} = ${ans} \\\\).`
+                            explanation: `<br><b>Paso 1:</b> Como importa el orden (los lugares del podio no dan lo mismo), usamos Variación.<br><b>Paso 2:</b> De forma rápida: para el 1° lugar hay ${elem} candidatos, para el 2° quedan ${elem-1}, y para el 3° quedan ${elem-2}.<br><b>Paso 3:</b> Se multiplican las opciones.<br><br>💡 <b>Total:</b> \\( ${elem} \\times ${elem-1} \\times ${elem-2} = ${ans} \\).`
                         };
                     }
                 },
@@ -3377,7 +3523,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
             const maxIngreso = a * (vX * vX) + b * vX + c; // I(vX)
             
             return {
-                text: `Los ingresos semanales de una marca (en miles de pesos) están modelados por \\\\( I(x) = ${a}x^2 + ${b}x ${c} \\\\), donde \\\\( x \\\\) representa la cantidad de polerones vendidos. ¿Cuál es la cantidad de polerones que maximiza los ingresos y a cuánto asciende dicho ingreso máximo?`,
+                text: `Los ingresos semanales de una marca (en miles de pesos) están modelados por \\( I(x) = ${a}x^2 + ${b}x ${c} \\), donde \\( x \\) representa la cantidad de polerones vendidos. ¿Cuál es la cantidad de polerones que maximiza los ingresos y a cuánto asciende dicho ingreso máximo?`,
                 options: [
                     `${vX} polerones, obteniendo $${(maxIngreso * 1000).toLocaleString('es-CL')}`,
                     `${vX * 2} polerones, obteniendo $${(maxIngreso * 1000).toLocaleString('es-CL')}`,
@@ -3385,7 +3531,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                     `${Math.floor(vX / 2)} polerones, obteniendo $${(maxIngreso * 1000).toLocaleString('es-CL')}`
                 ],
                 correct: 0,
-                explanation: `Para maximizar, buscamos el vértice. X = \\\\( \\\\frac{-b}{2a} = \\\\frac{-${b}}{2  ×  ${a}} = ${vX} \\\\) polerones. Evaluamos \\\\( I(${vX}) = ${a}(${vX})^2 + ${b}(${vX}) ${c} = ${maxIngreso} \\\\) miles de pesos, es decir, $${(maxIngreso * 1000).toLocaleString('es-CL')}.`
+                explanation: `Para maximizar, buscamos el vértice. X = \\( \\frac{-b}{2a} = \\frac{-${b}}{2  ×  ${a}} = ${vX} \\) polerones. Evaluamos \\( I(${vX}) = ${a}(${vX})^2 + ${b}(${vX}) ${c} = ${maxIngreso} \\) miles de pesos, es decir, $${(maxIngreso * 1000).toLocaleString('es-CL')}.`
             };
         }
     }
@@ -4329,6 +4475,13 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                             // Damos paso libre a los simuladores
                             if (muroDePago) muroDePago.classList.add('hidden');
                             if (contenidoPremium) contenidoPremium.classList.remove('hidden');
+
+                            // Desocultar perfil y cambiar texto de práctica
+                            const navPerfil = document.getElementById('nav-perfil');
+                            if (navPerfil) navPerfil.classList.remove('hidden');
+                            const navPractica = document.getElementById('nav-practica');
+                            if (navPractica) navPractica.innerHTML = '<span class="mr-1">🔓</span> Práctica';
+                            
                             return; 
                         }
                     }
@@ -4358,6 +4511,250 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                 }).catch((error) => console.error(error));
             };
         }
+    </script>
+
+    <script>
+        // Lógica de Máquina de Fracciones
+        let fracOp = 'suma';
+        function setFracOp(op) {
+            fracOp = op;
+            document.getElementById('btn-frac-suma').className = op === 'suma' ? 'flex-1 bg-stone-900 text-white py-2 rounded-lg font-bold' : 'flex-1 bg-stone-200 text-stone-700 py-2 rounded-lg font-bold hover:bg-stone-300';
+            document.getElementById('btn-frac-mult').className = op === 'mult' ? 'flex-1 bg-stone-900 text-white py-2 rounded-lg font-bold' : 'flex-1 bg-stone-200 text-stone-700 py-2 rounded-lg font-bold hover:bg-stone-300';
+            updateFracciones();
+        }
+        function updateFracciones() {
+            const n1 = parseInt(document.getElementById('frac1-num').value);
+            const d1 = parseInt(document.getElementById('frac1-den').value);
+            const n2 = parseInt(document.getElementById('frac2-num').value);
+            const d2 = parseInt(document.getElementById('frac2-den').value);
+            
+            document.getElementById('frac1-val').innerText = `${n1}/${d1}`;
+            document.getElementById('frac2-val').innerText = `${n2}/${d2}`;
+            
+            const svg = document.getElementById('svg-fracciones');
+            svg.innerHTML = '';
+            
+            // Draw A
+            const w1 = (n1/d1) * 200;
+            svg.innerHTML += `<rect x="50" y="30" width="200" height="30" fill="#fef3c7" stroke="#d97706" stroke-width="2" rx="4"/>`;
+            svg.innerHTML += `<rect x="50" y="30" width="${w1}" height="30" fill="#f59e0b" rx="4"/>`;
+            svg.innerHTML += `<text x="15" y="50" font-weight="bold" fill="#d97706">${n1}/${d1}</text>`;
+            
+            // Draw B
+            const w2 = (n2/d2) * 200;
+            svg.innerHTML += `<rect x="50" y="80" width="200" height="30" fill="#dbeafe" stroke="#2563eb" stroke-width="2" rx="4"/>`;
+            svg.innerHTML += `<rect x="50" y="80" width="${w2}" height="30" fill="#3b82f6" rx="4"/>`;
+            svg.innerHTML += `<text x="15" y="100" font-weight="bold" fill="#2563eb">${n2}/${d2}</text>`;
+            
+            // Draw Result
+            let res_n, res_d, w3;
+            if (fracOp === 'suma') {
+                res_n = n1*d2 + n2*d1;
+                res_d = d1*d2;
+                w3 = (res_n/res_d) * 200;
+                document.getElementById('frac-resultado-texto').innerText = `${n1}/${d1} + ${n2}/${d2} = ${res_n}/${res_d}`;
+            } else {
+                res_n = n1*n2;
+                res_d = d1*d2;
+                w3 = (res_n/res_d) * 200;
+                document.getElementById('frac-resultado-texto').innerText = `${n1}/${d1} × ${n2}/${d2} = ${res_n}/${res_d}`;
+            }
+            
+            svg.innerHTML += `<rect x="50" y="150" width="200" height="30" fill="#e7e5e4" stroke="#57534e" stroke-width="2" rx="4"/>`;
+            svg.innerHTML += `<rect x="50" y="150" width="${Math.min(200, w3)}" height="30" fill="#1c1917" rx="4"/>`;
+            svg.innerHTML += `<text x="15" y="170" font-weight="bold" fill="#1c1917">Res</text>`;
+            
+            if(w3 > 200) {
+                svg.innerHTML += `<text x="260" y="170" font-weight="bold" fill="#ef4444" font-size="12">>1</text>`;
+            }
+        }
+
+        // Lógica Simulador Funciones
+        function updateFunciones() {
+            const tipo = document.getElementById('func-tipo').value;
+            const a = parseFloat(document.getElementById('func-a').value);
+            const b = parseFloat(document.getElementById('func-b').value);
+            const c = parseFloat(document.getElementById('func-c').value);
+            
+            document.getElementById('func-a-val').innerText = a;
+            document.getElementById('func-b-val').innerText = b;
+            document.getElementById('func-c-val').innerText = c;
+            
+            const contB = document.getElementById('cont-func-b');
+            if(tipo === 'afin') contB.classList.add('hidden');
+            else contB.classList.remove('hidden');
+            
+            const svg = document.getElementById('svg-funciones');
+            
+            // Draw grid
+            let content = '';
+            for(let i=-10; i<=10; i+=2) {
+                content += `<line x1="-10" y1="${i}" x2="10" y2="${i}" stroke="#e7e5e4" stroke-width="0.1"/>`;
+                content += `<line x1="${i}" y1="-10" x2="${i}" y2="10" stroke="#e7e5e4" stroke-width="0.1"/>`;
+            }
+            content += `<line x1="-10" y1="0" x2="10" y2="0" stroke="#78716c" stroke-width="0.3"/>`; // X axis
+            content += `<line x1="0" y1="-10" x2="0" y2="10" stroke="#78716c" stroke-width="0.3"/>`; // Y axis
+            
+            // Draw function
+            let pts = [];
+            for(let x=-10; x<=10; x+=0.2) {
+                let y = tipo === 'cuadratica' ? (a*x*x + b*x + c) : (a*x + c);
+                // Invert Y for SVG coordinates
+                pts.push(`${x},${-y}`);
+            }
+            
+            content += `<polyline points="${pts.join(' ')}" fill="none" stroke="#4f46e5" stroke-width="0.4" stroke-linejoin="round"/>`;
+            svg.innerHTML = content;
+        }
+
+        // Lógica Pizarra Vectorial
+        let vecOp = 'suma';
+        function setVecOp(op) {
+            vecOp = op;
+            document.getElementById('btn-vec-suma').className = op === 'suma' ? 'flex-1 bg-stone-900 text-white py-2 rounded-lg font-bold' : 'flex-1 bg-stone-200 text-stone-700 py-2 rounded-lg font-bold hover:bg-stone-300';
+            document.getElementById('btn-vec-resta').className = op === 'resta' ? 'flex-1 bg-stone-900 text-white py-2 rounded-lg font-bold' : 'flex-1 bg-stone-200 text-stone-700 py-2 rounded-lg font-bold hover:bg-stone-300';
+            updateVectores();
+        }
+        function updateVectores() {
+            const ux = parseInt(document.getElementById('vec-u-x').value);
+            const uy = parseInt(document.getElementById('vec-u-y').value);
+            const vx = parseInt(document.getElementById('vec-v-x').value);
+            const vy = parseInt(document.getElementById('vec-v-y').value);
+            
+            const rx = vecOp === 'suma' ? ux + vx : ux - vx;
+            const ry = vecOp === 'suma' ? uy + vy : uy - vy;
+            
+            const svg = document.getElementById('svg-vectores');
+            let content = '';
+            
+            // Axes
+            content += `<line x1="-12" y1="0" x2="12" y2="0" stroke="#d6d3d1" stroke-width="0.2"/>`;
+            content += `<line x1="0" y1="-12" x2="0" y2="12" stroke="#d6d3d1" stroke-width="0.2"/>`;
+            
+            // Defs for arrows
+            content += `<defs>
+                <marker id="arrowU" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto"><polygon points="0,0 4,2 0,4" fill="#e11d48"/></marker>
+                <marker id="arrowV" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto"><polygon points="0,0 4,2 0,4" fill="#2563eb"/></marker>
+                <marker id="arrowR" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto"><polygon points="0,0 4,2 0,4" fill="#1c1917"/></marker>
+            </defs>`;
+            
+            // Vector U (Rose)
+            content += `<line x1="0" y1="0" x2="${ux}" y2="${-uy}" stroke="#e11d48" stroke-width="0.5" marker-end="url(#arrowU)"/>`;
+            
+            // Vector V (Blue) - Starts from origin, or from U if suma
+            if(vecOp === 'suma') {
+                content += `<line x1="${ux}" y1="${-uy}" x2="${ux+vx}" y2="${-(uy+vy)}" stroke="#2563eb" stroke-width="0.5" marker-end="url(#arrowV)" stroke-dasharray="0.5,0.5"/>`;
+            } else {
+                content += `<line x1="${ux}" y1="${-uy}" x2="${ux-vx}" y2="${-(uy-vy)}" stroke="#2563eb" stroke-width="0.5" marker-end="url(#arrowV)" stroke-dasharray="0.5,0.5"/>`;
+            }
+            content += `<line x1="0" y1="0" x2="${vx}" y2="${-vy}" stroke="#2563eb" stroke-width="0.3" opacity="0.4"/>`;
+            
+            // Result Vector (Black)
+            content += `<line x1="0" y1="0" x2="${rx}" y2="${-ry}" stroke="#1c1917" stroke-width="0.6" marker-end="url(#arrowR)"/>`;
+            
+            svg.innerHTML = content;
+            
+            const modU = Math.sqrt(ux*ux + uy*uy).toFixed(2);
+            const modV = Math.sqrt(vx*vx + vy*vy).toFixed(2);
+            const modR = Math.sqrt(rx*rx + ry*ry).toFixed(2);
+            
+            const opSign = vecOp === 'suma' ? '+' : '-';
+            let resHtml = `<p class="text-rose-600">U(${ux}, ${uy}) |u| = ${modU}</p>`;
+            resHtml += `<p class="text-blue-600">V(${vx}, ${vy}) |v| = ${modV}</p>`;
+            resHtml += `<p class="text-stone-900 border-t border-stone-300 pt-1 mt-1">R = U ${opSign} V = (${rx}, ${ry}) |R| = ${modR}</p>`;
+            document.getElementById('vec-resultado-texto').innerHTML = resHtml;
+        }
+
+        // Lógica Teoría Conjuntos
+        let conjOp = 'union';
+        function setConjuntoOp(op) {
+            conjOp = op;
+            ['union', 'interseccion', 'restaA', 'restaB'].forEach(id => {
+                const btn = document.getElementById('btn-conj-' + id);
+                if(id === op) {
+                    btn.className = 'bg-stone-900 text-white py-3 rounded-xl font-bold shadow-sm';
+                } else {
+                    btn.className = 'bg-white text-stone-800 border-2 border-stone-200 hover:border-stone-400 py-3 rounded-xl font-bold shadow-sm transition-colors';
+                }
+            });
+            updateConjuntos();
+        }
+        function updateConjuntos() {
+            const svg = document.getElementById('svg-conjuntos');
+            let content = '';
+            
+            // Colors
+            const colorA = '#3b82f6'; // blue
+            const colorB = '#10b981'; // emerald
+            const colorBoth = '#0f766e'; // teal
+            const colorEmpty = 'none';
+            
+            let fillA = colorEmpty, fillB = colorEmpty, fillInter = colorEmpty;
+            let text = '';
+            
+            if(conjOp === 'union') {
+                fillA = colorA; fillB = colorB; fillInter = colorBoth;
+                text = "Elementos que están en A, en B, o en ambos.";
+            } else if(conjOp === 'interseccion') {
+                fillInter = colorBoth;
+                text = "Elementos que están SIMULTÁNEAMENTE en A y en B.";
+            } else if(conjOp === 'restaA') {
+                fillA = colorA;
+                text = "Elementos exclusivos de A (A pero no B).";
+            } else if(conjOp === 'restaB') {
+                fillB = colorB;
+                text = "Elementos exclusivos de B (B pero no A).";
+            }
+            
+            // We use clipping or just simple shapes. 
+            // A simple way is to draw the circles and use SVG masking/clipping for the intersection, 
+            // but actually we can just draw 3 parts using SVG paths if we want exact filling, 
+            // OR use SVG `<circle>` with `mix-blend-mode: multiply` but that might not work cleanly.
+            // SVG Path approach:
+            // Circle A center (110, 100) r=60
+            // Circle B center (190, 100) r=60
+            // Distance = 80. Intersection points are (150, 55.28) and (150, 144.72)
+            
+            // Background
+            content += `<rect x="0" y="0" width="300" height="200" fill="#f5f5f4" rx="10"/>`;
+            
+            if(conjOp === 'union') {
+                content += `<circle cx="110" cy="100" r="60" fill="${colorA}" opacity="0.7"/>`;
+                content += `<circle cx="190" cy="100" r="60" fill="${colorB}" opacity="0.7"/>`;
+            } else if (conjOp === 'interseccion') {
+                content += `<circle cx="110" cy="100" r="60" fill="#e7e5e4" stroke="#a8a29e" stroke-width="2"/>`;
+                content += `<circle cx="190" cy="100" r="60" fill="#e7e5e4" stroke="#a8a29e" stroke-width="2"/>`;
+                content += `<path d="M 150 55.28 A 60 60 0 0 0 150 144.72 A 60 60 0 0 0 150 55.28 Z" fill="${colorBoth}"/>`;
+            } else if (conjOp === 'restaA') {
+                content += `<circle cx="110" cy="100" r="60" fill="${colorA}" opacity="0.7"/>`;
+                content += `<path d="M 150 55.28 A 60 60 0 0 0 150 144.72 A 60 60 0 0 0 150 55.28 Z" fill="#f5f5f4"/>`;
+                content += `<circle cx="190" cy="100" r="60" fill="none" stroke="#a8a29e" stroke-width="2"/>`;
+                content += `<circle cx="110" cy="100" r="60" fill="none" stroke="${colorA}" stroke-width="2"/>`;
+            } else if (conjOp === 'restaB') {
+                content += `<circle cx="190" cy="100" r="60" fill="${colorB}" opacity="0.7"/>`;
+                content += `<path d="M 150 55.28 A 60 60 0 0 1 150 144.72 A 60 60 0 0 1 150 55.28 Z" fill="#f5f5f4"/>`;
+                content += `<circle cx="110" cy="100" r="60" fill="none" stroke="#a8a29e" stroke-width="2"/>`;
+                content += `<circle cx="190" cy="100" r="60" fill="none" stroke="${colorB}" stroke-width="2"/>`;
+            }
+            
+            // Labels
+            content += `<text x="70" y="105" font-size="24" font-weight="bold" fill="#1e3a8a">A</text>`;
+            content += `<text x="210" y="105" font-size="24" font-weight="bold" fill="#064e3b">B</text>`;
+            
+            svg.innerHTML = content;
+            document.getElementById('conj-resultado-texto').innerText = text;
+        }
+
+        // Initialize all modules when visualizador is shown
+        // We can hook this into the menu click or just run it once
+        setTimeout(() => {
+            if(document.getElementById('svg-fracciones')) {
+                updateFracciones();
+                updateFunciones();
+                updateVectores();
+                updateConjuntos();
+            }
+        }, 1000);
     </script>
 </body>
 </html>
