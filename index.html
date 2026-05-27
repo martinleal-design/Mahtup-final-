@@ -13,8 +13,8 @@
     <script>
         window.MathJax = {
             tex: {
-                inlineMath: [['\\(', '\\)'], ['$', '$']],
-                displayMath: [['\\[', '\\]'], ['$$', '$$']]
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
             }
         };
     </script>
@@ -78,6 +78,11 @@
     </style>
 </head>
 <body id="main-body" class="bg-[#FAF8F5] text-stone-800 antialiased flex flex-col min-h-screen transition-colors duration-500">
+    <!-- BETA BANNER -->
+    <div class="bg-gradient-to-r from-amber-500 to-orange-600 text-white text-center py-3 px-4 font-bold text-sm shadow-md z-50 relative">
+        🚀 MATHUP está en Fase Beta. ¡Acceso Premium liberado temporalmente! Crea tu cuenta gratuita y obtén acceso total.
+    </div>
+
 
     <nav class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -130,12 +135,43 @@
                     <p id="login-error" class="text-red-500 text-sm hidden font-bold bg-red-50 p-3 rounded-lg">❌ Credenciales incorrectas. Intenta nuevamente.</p>
                     <div class="flex flex-col gap-3 mt-6">
                         <button id="btn-login" class="w-full bg-stone-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5">Iniciar Sesión</button>
-                        <button onclick="app.closeLoginModal(); app.openCheckoutModal()" class="w-full bg-white hover:bg-stone-50 text-stone-800 font-bold py-3.5 rounded-xl shadow-sm border-2 border-stone-200 transition-colors">Crear Cuenta</button>
+                        <button onclick="app.closeLoginModal(); app.openRegisterModal()" class="w-full bg-white hover:bg-stone-50 text-stone-800 font-bold py-3.5 rounded-xl shadow-sm border-2 border-stone-200 transition-colors">Crear Cuenta</button>
                     </div>
                 </div>
             </div>
         </div>
 
+        
+        <div id="register-modal" class="hidden fixed inset-0 bg-stone-900/80 backdrop-blur-sm z-[100] flex items-center justify-center fade-in px-4">
+            <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative border border-stone-200">
+                <button onclick="app.closeRegisterModal()" class="absolute top-4 right-5 text-stone-400 hover:text-stone-700 text-3xl leading-none">&times;</button>
+                <div class="text-center mb-6">
+                    <span class="text-5xl inline-block mb-3">🎓</span>
+                    <h3 class="text-2xl font-black text-stone-900">Crear Cuenta Beta</h3>
+                    <p class="text-stone-500 text-sm mt-2">Regístrate ahora y obtén acceso Premium liberado hasta el 30 de Junio.</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-stone-700 mb-2">Nombre</label>
+                        <input type="text" id="register-name" placeholder="Tu Nombre" class="w-full border-stone-300 rounded-xl p-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 border bg-stone-50 outline-none transition-shadow font-medium">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-stone-700 mb-2">Correo electrónico</label>
+                        <input type="email" id="register-email" placeholder="alumno@mathup.cl" class="w-full border-stone-300 rounded-xl p-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 border bg-stone-50 outline-none transition-shadow font-medium">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-stone-700 mb-2">Contraseña</label>
+                        <input type="password" id="register-password" placeholder="••••••••" class="w-full border-stone-300 rounded-xl p-3 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 border bg-stone-50 outline-none transition-shadow font-medium">
+                    </div>
+                    <p id="register-error" class="text-red-500 text-sm hidden font-bold bg-red-50 p-3 rounded-lg">❌ Error al registrarse.</p>
+                    <div class="flex flex-col gap-3 mt-6">
+                        <button id="btn-register" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3.5 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5">Crear Cuenta</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div id="checkout-modal" class="hidden fixed inset-0 bg-stone-900/80 backdrop-blur-sm z-[100] flex items-center justify-center fade-in px-4">
             <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative border border-stone-200">
                 <button onclick="app.closeCheckoutModal()" class="absolute top-4 right-5 text-stone-400 hover:text-stone-700 text-3xl leading-none">&times;</button>
@@ -145,27 +181,44 @@
                     <p class="text-stone-500 text-sm mt-2">Desbloquea simuladores infinitos, historial de progreso y laboratorios interactivos.</p>
                 </div>
                 
+                
                 <div class="space-y-4">
-                    <div class="border-2 border-amber-400 bg-amber-50 rounded-2xl p-4 cursor-pointer hover:bg-amber-100 transition-colors" onclick="window.location.href='https://www.flow.cl/btn.php?token=x9b7891a094c153f8c0f610c0b631279a0149468'">
+                    <!-- BETA PLAN -->
+                    <div class="border-2 border-amber-400 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-6 cursor-pointer hover:shadow-lg transition-all transform hover:-translate-y-1 relative overflow-hidden" onclick="app.closeCheckoutModal(); app.openRegisterModal()">
+                        <div class="absolute top-0 right-0 bg-stone-900 text-white text-xs font-bold px-3 py-1 rounded-bl-xl">FASE BETA</div>
                         <div class="flex justify-between items-center mb-2">
-                            <h4 class="font-black text-amber-900 text-lg">Plan Mensual</h4>
-                            <span class="bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded-full">OFERTA</span>
+                            <h4 class="font-black text-white text-2xl">Acceso Total Beta</h4>
                         </div>
-                        <div class="text-sm text-amber-700 mb-2">Acceso total por 30 días.</div>
-                        <div class="font-black text-2xl text-amber-900">$9.990 <span class="text-sm line-through text-amber-600 font-medium">$19.990</span></div>
-                    </div>
-
-                    <div class="border-2 border-stone-200 bg-white rounded-2xl p-4 cursor-pointer hover:bg-stone-50 transition-colors" onclick="window.location.href='https://www.flow.cl/btn.php?token=h8aa76c6a703379332dcf8df68a286bff83357da'">
-                        <div class="flex justify-between items-center mb-2">
-                            <h4 class="font-black text-stone-900 text-lg">Plan Anual</h4>
-                            <span class="bg-stone-200 text-stone-600 text-xs font-bold px-2 py-1 rounded-full">RECOMENDADO</span>
-                        </div>
-                        <div class="text-sm text-stone-500 mb-2">Preparación intensiva hasta la PAES.</div>
-                        <div class="font-black text-2xl text-stone-900">$69.990 <span class="text-sm line-through text-stone-400 font-medium">$119.880</span></div>
+                        <div class="text-amber-100 mb-2 font-medium">Acceso liberado a todos los simuladores M1 y M2.</div>
+                        <div class="font-black text-3xl text-white mb-4">$0 <span class="text-sm font-medium text-amber-200">/ hasta el 30 de Junio</span></div>
+                        <button class="w-full bg-white text-stone-900 font-bold py-3 rounded-xl shadow-sm text-lg">Crear Cuenta Beta - $0</button>
                     </div>
                     
-                    <p class="text-xs text-center text-stone-500 mt-4">Serás redirigido a Flow para pagar de forma segura. Al pagar, tu correo quedará registrado como usuario Premium. <br><br>¿Ya tienes cuenta? <a href="javascript:void(0)" onclick="app.closeCheckoutModal(); app.openLoginModal();" class="text-teal-600 font-bold hover:underline">Inicia Sesión aquí</a>.</p>
+                    <!-- PLAN MENSUAL (DISABLED) -->
+                    <div class="border-2 border-stone-200 bg-stone-50 rounded-2xl p-4 flex flex-col opacity-60 grayscale relative">
+                        <div class="absolute inset-0 z-10 flex items-center justify-center flex-col bg-white/40 backdrop-blur-[2px] rounded-2xl">
+                            <span class="text-4xl mb-2">🔒</span>
+                            <span class="font-black text-stone-800 text-xl bg-white px-4 py-1 rounded-full shadow-sm">Próximamente</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-black text-stone-800 text-lg">Plan Mensual</h4>
+                        </div>
+                        <div class="font-black text-2xl text-stone-500">$9.990</div>
+                    </div>
+
+                    <!-- PLAN ANUAL (DISABLED) -->
+                    <div class="border-2 border-stone-200 bg-stone-50 rounded-2xl p-4 flex flex-col opacity-60 grayscale relative">
+                        <div class="absolute inset-0 z-10 flex items-center justify-center flex-col bg-white/40 backdrop-blur-[2px] rounded-2xl">
+                            <span class="text-4xl mb-2">🔒</span>
+                            <span class="font-black text-stone-800 text-xl bg-white px-4 py-1 rounded-full shadow-sm">Próximamente</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-black text-stone-800 text-lg">Plan Anual</h4>
+                        </div>
+                        <div class="font-black text-2xl text-stone-500">$69.990</div>
+                    </div>
                 </div>
+
             </div>
         </div>
 
@@ -183,10 +236,7 @@
                     <button onclick="app.checkPremiumAccess('practica')" class="bg-teal-600 hover:bg-teal-700 text-white font-bold text-lg py-4 px-10 rounded-full shadow-xl shadow-teal-600/20 transition-all transform hover:scale-105 flex items-center w-full sm:w-auto justify-center">
                         ¡Empieza YA! <span class="ml-2">&#x1F680;</span>
                     </button>
-                    <button onclick="window.location.href='https://www.flow.cl/btn.php?token=x9b7891a094c153f8c0f610c0b631279a0149468'" class="bg-amber-500 hover:bg-amber-600 text-white font-bold text-lg py-3 px-8 rounded-full shadow-xl shadow-amber-500/20 transition-all transform hover:scale-105 flex flex-col items-center w-full sm:w-auto justify-center leading-none">
-                        <span>Oferta Épica: $9.990</span>
-                        <span class="text-xs text-amber-100 font-medium mt-1 line-through">Normal: $19.990</span>
-                    </button>
+                    
                     <button onclick="app.navigate('visualizador')" class="bg-white border-2 border-stone-200 hover:border-stone-900 text-stone-900 font-bold py-4 px-8 rounded-full shadow-sm transition-colors flex items-center w-full sm:w-auto justify-center">
                         Laboratorio Visual <span class="ml-2">&#x1F3A8;</span>
                     </button>
@@ -281,7 +331,7 @@
                             <li class="flex items-start gap-3 text-white text-sm font-bold"><span class="text-amber-500 font-bold">✓</span> Base de Datos Personal (Progreso)</li>
                             <li class="flex items-start gap-3 text-stone-300 text-sm"><span class="text-amber-500 font-bold">✓</span> Explicaciones Paso a Paso</li>
                         </ul>
-                        <button onclick="window.location.href='https://www.flow.cl/btn.php?token=x9b7891a094c153f8c0f610c0b631279a0149468'" class="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-900 font-black transition-transform transform hover:-translate-y-1 shadow-[0_0_20px_rgba(245,158,11,0.3)]">Suscribirse Mensual</button>
+                        <button disabled class="w-full py-3.5 rounded-xl bg-stone-700 text-stone-400 font-black cursor-not-allowed flex items-center justify-center gap-2"><span class="text-xl">🔒</span> Próximamente</button>
                     </div>
 
                     <!-- Plan PRO Anual -->
@@ -298,7 +348,7 @@
                             <li class="flex items-start gap-3 text-teal-800 text-sm"><span class="text-teal-600 font-bold">✓</span> Preparación ininterrumpida hasta la PAES</li>
                             <li class="flex items-start gap-3 text-teal-800 text-sm"><span class="text-teal-600 font-bold">✓</span> Todas las funciones PRO incluidas</li>
                         </ul>
-                        <button onclick="window.location.href='https://www.flow.cl/btn.php?token=h8aa76c6a703379332dcf8df68a286bff83357da'" class="w-full py-3.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold transition-colors shadow-md shadow-teal-600/20">Obtener Anual</button>
+                        <button disabled class="w-full py-3.5 rounded-xl bg-stone-200 text-stone-400 font-bold cursor-not-allowed flex items-center justify-center gap-2"><span class="text-xl">🔒</span> Próximamente</button>
                     </div>
                 </div>
             </div>
@@ -2823,7 +2873,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                             text: `Dos amigos arriendan un estudio por $${total}. El primero aportó $${c1} y el segundo pagó el resto. Tras producir un tema, lo venden en $${g} y se reparten las ganancias proporcionalmente al aporte. ¿Cuánto recibe el segundo amigo?`,
                             options: [`$${ans}`, `$${g/2}`, `$${g * (c1/total)}`, `$${c2}`],
                             correct: 0,
-                            explanation: `El segundo amigo aportó ${total} - ${c1} = $${c2}. La proporción de su aporte sobre el total es \\( ${c2}/${total} \\). Multiplicado por la ganancia total: ${g}  ×  \\frac{${c2}}{${total}} = $${ans}.`
+                            explanation: `El segundo amigo aportó ${total} - ${c1} = $${c2}. La proporción de su aporte sobre el total es \\( ${c2}/${total} \\). Multiplicado por la ganancia total: \\(  \\times \\frac{}{} =  \\).`
                         }
                     }
                 },
@@ -3657,8 +3707,19 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                 if (this.isPremium) this.navigate(targetView);
                 else this.openLoginModal();
             },
-            openLoginModal() { document.getElementById('login-modal').classList.remove('hidden'); },
-            closeLoginModal() { document.getElementById('login-modal').classList.add('hidden'); document.getElementById('login-error').classList.add('hidden'); },
+            openLoginModal() {
+                document.getElementById('login-modal').classList.remove('hidden'); document.getElementById('login-modal').classList.remove('hidden'); },
+            closeLoginModal() {
+                document.getElementById('login-modal').classList.add('hidden');
+                document.getElementById('login-modal').classList.add('hidden');
+            },
+            openRegisterModal() {
+                document.getElementById('register-modal').classList.remove('hidden');
+            },
+            closeRegisterModal() {
+                document.getElementById('register-modal').classList.add('hidden');
+            },
+            dummy() { document.getElementById('login-modal').classList.add('hidden'); document.getElementById('login-error').classList.add('hidden'); },
             verifyEmail() {
                 const email = document.getElementById('login-email').value.trim().toLowerCase();
                 if (this.allowedEmails.includes(email)) {
@@ -4403,8 +4464,8 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
     <script type="module">
         // 1. Importar herramientas de Firebase (¡Sumamos Firestore!)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
 
         // 2. TUS LLAVES MAESTRAS
         const firebaseConfig = {
@@ -4445,6 +4506,61 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                 });
         });
 
+        
+        // REGISTRATION LOGIC BETA PHASE
+        const btnRegister = document.getElementById('btn-register');
+        const regEmailInput = document.getElementById('register-email');
+        const regPasswordInput = document.getElementById('register-password');
+        const regNameInput = document.getElementById('register-name');
+        const regErrorMsg = document.getElementById('register-error');
+
+        if(btnRegister) {
+            btnRegister.addEventListener('click', async () => {
+                const email = regEmailInput.value.trim().toLowerCase();
+                const password = regPasswordInput.value;
+                const nombre = regNameInput.value.trim();
+                
+                if(!email || !password || !nombre) {
+                    regErrorMsg.innerText = "❌ Completa todos los campos.";
+                    regErrorMsg.classList.remove('hidden');
+                    return;
+                }
+
+                btnRegister.innerText = "Creando cuenta...";
+                btnRegister.disabled = true;
+
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    const user = userCredential.user;
+                    
+                    // SAVE TO FIRESTORE DIRECTLY AS PREMIUM UNTIL JUNE 30
+                    await setDoc(doc(db, "usuarios", email), {
+                        nombre: nombre,
+                        email: email,
+                        estado: "Premium",
+                        fecha_registro: new Date().toISOString(),
+                        fecha_vencimiento: "2026-06-30"
+                    });
+                    
+                    document.getElementById('register-modal').classList.add('hidden');
+                    regErrorMsg.classList.add('hidden');
+                    
+                } catch (error) {
+                    console.error("Error al registrar:", error);
+                    regErrorMsg.innerText = "❌ Error: " + error.message;
+                    regErrorMsg.classList.remove('hidden');
+                    btnRegister.innerText = "Crear Cuenta";
+                    btnRegister.disabled = false;
+                }
+            });
+        }
+        
+        // Fix app object methods if missing
+        if (!app.openRegisterModal) {
+            app.openRegisterModal = function() { document.getElementById('register-modal').classList.remove('hidden'); };
+            app.closeRegisterModal = function() { document.getElementById('register-modal').classList.add('hidden'); };
+        }
+
         // 5. EL GUARDIÁN INTELIGENTE (Calcula accesos y fechas 24/7)
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -4460,7 +4576,8 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                         const hoy = new Date().toISOString().split('T')[0];
 
                         // Verificamos matemáticamente si su estado es Premium y si no ha vencido
-                        if (datosUsuario.estado === "Premium" && datosUsuario.fecha_vencimiento >= hoy) {
+                        // BETA PHASE BYPASS: Todos entran como Premium temporalmente
+                        if (true || (datosUsuario.estado === "Premium" && datosUsuario.fecha_vencimiento >= hoy)) {
                             console.log("Acceso Premium verificado. Vence el:", datosUsuario.fecha_vencimiento);
                             
                             // Autorización Premium para tu App (Esencial para que el menú superior funcione)
