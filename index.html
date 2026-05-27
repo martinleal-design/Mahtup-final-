@@ -4772,6 +4772,45 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
         const regNameInput = document.getElementById('register-name');
         const regErrorMsg = document.getElementById('register-error');
 
+        // Lógica Restablecer Contraseña
+        const btnReset = document.getElementById('btn-reset-password');
+        const resetEmailInput = document.getElementById('reset-email');
+        const resetMessage = document.getElementById('reset-message');
+
+        if(btnReset) {
+            btnReset.addEventListener('click', () => {
+                const email = resetEmailInput.value.trim().toLowerCase();
+                if (!email) {
+                    resetMessage.className = "text-red-500 text-sm font-bold bg-red-50 p-3 rounded-lg block mt-4";
+                    resetMessage.innerText = "Por favor ingresa tu correo.";
+                    resetMessage.classList.remove('hidden');
+                    return;
+                }
+                
+                btnReset.innerText = "Enviando...";
+                btnReset.disabled = true;
+
+                sendPasswordResetEmail(auth, email)
+                    .then(() => {
+                        resetMessage.className = "text-green-700 text-sm font-bold bg-green-50 p-3 rounded-lg block mt-4 border border-green-200";
+                        resetMessage.innerText = "Te hemos enviado un enlace para restablecer tu contraseña, revisa tu bandeja de entrada o spam.";
+                        resetMessage.classList.remove('hidden');
+                        btnReset.innerText = "Enlace Enviado";
+                    })
+                    .catch((error) => {
+                        resetMessage.className = "text-red-500 text-sm font-bold bg-red-50 p-3 rounded-lg block mt-4";
+                        if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-email') {
+                            resetMessage.innerText = "Este correo no está registrado en la base de datos.";
+                        } else {
+                            resetMessage.innerText = "Error al enviar el enlace. Inténtalo nuevamente.";
+                        }
+                        resetMessage.classList.remove('hidden');
+                        btnReset.innerText = "Enviar Enlace";
+                        btnReset.disabled = false;
+                    });
+            });
+        }
+
         if(btnRegister) {
             btnRegister.addEventListener('click', async () => {
                 const email = regEmailInput.value.trim().toLowerCase();
