@@ -14,8 +14,8 @@
     <script>
         window.MathJax = {
             tex: {
-                inlineMath: [['\\(', '\\)']],
-                displayMath: [['\\[', '\\]']]
+                inlineMath: [['\\(', '\\)']], // REMOVED $...$ TO FIX CURRENCY TEXT BUG
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
             }
         };
     </script>
@@ -99,6 +99,9 @@
                     <button onclick="app.checkPremiumAccess('practica')" id="nav-practica" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors flex items-center">
                         <span class="mr-1">&#x1F512;</span> Práctica (Premium)
                     </button>
+                    <button onclick="app.checkPremiumAccess('reforzamiento')" id="nav-reforzamiento" class="hidden nav-btn px-3 py-2 rounded-lg text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors flex items-center">
+                        <span class="mr-1">🏋️‍♂️</span> Reforzamiento
+                    </button>
                     
                     <div id="nav-streak" class="hidden nav-btn px-3 py-2 rounded-lg text-sm font-bold text-orange-500 bg-orange-50 flex items-center mr-2" title="Racha Diaria">
                         <span class="mr-1">🔥</span> <span id="streak-count">0</span>
@@ -106,8 +109,13 @@
                     <button onclick="app.checkPremiumAccess('perfil')" id="nav-perfil" class="hidden nav-btn px-3 py-2 rounded-lg text-sm font-medium text-stone-500 hover:text-stone-900 transition-colors flex items-center">
                         <span class="mr-1">👤</span> Mi Perfil
                     </button>
-                    <!-- Dark Mode Toggle -->
-                    <button onclick="app.toggleTheme()" id="btn-theme" class="ml-2 px-3 py-1 rounded-lg text-xl hover:bg-stone-100 transition-colors" title="Modo Oscuro/Claro">🌙</button>
+                    <!-- Accessibilidad -->
+                    <div class="flex items-center ml-2 border-l border-stone-200 pl-2">
+                        <button onclick="app.changeFontSize(-1)" class="px-2 py-1 rounded-lg font-bold text-stone-500 hover:text-stone-900 hover:bg-stone-100 transition-colors" title="Reducir letra">A-</button>
+                        <button onclick="app.changeFontSize(1)" class="px-2 py-1 rounded-lg font-bold text-stone-500 hover:text-stone-900 hover:bg-stone-100 transition-colors" title="Aumentar letra">A+</button>
+                        <!-- Dark Mode Toggle -->
+                        <button onclick="app.toggleTheme()" id="btn-theme" class="ml-1 px-3 py-1 rounded-lg text-xl hover:bg-stone-100 transition-colors" title="Modo Oscuro/Claro">🌙</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -136,6 +144,7 @@
                     <p id="login-error" class="text-red-500 text-sm hidden font-bold bg-red-50 p-3 rounded-lg">❌ Credenciales incorrectas. Intenta nuevamente.</p>
                     <div class="flex flex-col gap-3 mt-6">
                         <button id="btn-login" class="w-full bg-stone-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5">Iniciar Sesión</button>
+                        <button type="button" onclick="app.closeLoginModal(); app.openResetModal()" class="text-sm font-bold text-stone-500 hover:text-stone-800 transition-colors self-center mt-1 mb-1">¿Olvidaste tu contraseña?</button>
                         <button onclick="app.closeLoginModal(); app.openRegisterModal()" class="w-full bg-white hover:bg-stone-50 text-stone-800 font-bold py-3.5 rounded-xl shadow-sm border-2 border-stone-200 transition-colors">Crear Cuenta</button>
                     </div>
                 </div>
@@ -447,6 +456,30 @@
                         <div class="w-8 h-8 rounded-full bg-stone-900 text-white font-bold flex items-center justify-center">2</div>
                         <h3 class="text-xl font-bold text-stone-800">Inicia tu Sesión</h3>
                     </div>
+                    
+                    <div class="mb-6 bg-stone-50 p-5 rounded-2xl border border-stone-200">
+                        <h4 class="font-bold text-stone-800 mb-3">⏱️ Límite de Tiempo</h4>
+                        <div class="flex flex-wrap gap-3">
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="time-limit" value="0" class="peer hidden" checked>
+                                <div class="text-center p-3 rounded-xl border-2 border-stone-200 peer-checked:border-teal-500 peer-checked:bg-teal-50 text-stone-600 font-bold transition-all">
+                                    Sin límite
+                                </div>
+                            </label>
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="time-limit" value="15" class="peer hidden">
+                                <div class="text-center p-3 rounded-xl border-2 border-stone-200 peer-checked:border-amber-500 peer-checked:bg-amber-50 text-stone-600 font-bold transition-all">
+                                    15 minutos
+                                </div>
+                            </label>
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="time-limit" value="30" class="peer hidden">
+                                <div class="text-center p-3 rounded-xl border-2 border-stone-200 peer-checked:border-red-500 peer-checked:bg-red-50 text-stone-600 font-bold transition-all">
+                                    30 minutos
+                                </div>
+                            </label>
+                        </div>
+                    </div>
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <button onclick="app.startQuiz('all')" class="lg:col-span-1 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl p-6 text-left transition-all shadow-lg flex flex-col justify-between">
                             <div>
@@ -484,9 +517,12 @@
                     <button onclick="app.exitQuiz()" class="text-stone-500 hover:text-red-600 font-bold text-sm flex items-center transition-colors px-3 py-1.5 rounded-md hover:bg-red-50">
                         &times; Salir
                     </button>
-                    <div class="text-center">
+                    <div class="text-center flex-1">
                         <span id="quiz-header-title" class="block font-black text-stone-800 tracking-wide uppercase text-sm">ENSAYO</span>
-                        <span id="quiz-header-progress" class="block text-stone-500 text-xs font-bold">Hoja 1 de 20</span>
+                        <span id="quiz-header-progress" class="block text-stone-500 text-xs font-bold mb-1">Hoja 1 de 20</span>
+                        <div id="quiz-timer-container" class="hidden justify-center items-center">
+                            <span id="quiz-timer" class="font-mono text-lg font-black text-red-600 bg-red-50 px-3 py-1 rounded-lg border border-red-200">00:00</span>
+                        </div>
                     </div>
                     <div class="w-20 text-right">
                         <span class="inline-block bg-teal-100 text-teal-800 text-xs font-bold px-2 py-1 rounded" id="quiz-difficulty-badge">Medio</span>
@@ -542,6 +578,27 @@
             </div>
 
         </section>
+        <section id="view-reforzamiento" class="view-section hidden fade-in">
+            <div class="mb-10 text-center">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 text-red-700 font-bold text-sm mb-6 border border-red-100">
+                    <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                    Banco de Errores
+                </div>
+                <h2 class="text-3xl md:text-5xl font-black text-stone-900 mb-4 tracking-tight">Tu Reforzamiento Personal</h2>
+                <p class="text-stone-600 max-w-2xl mx-auto text-lg">Practica los conceptos en los que te has equivocado o has omitido en tus ensayos anteriores.</p>
+            </div>
+            
+            <div id="reforzamiento-empty" class="hidden bg-green-50 border-2 border-green-200 rounded-3xl p-12 text-center shadow-sm max-w-2xl mx-auto">
+                <span class="text-6xl mb-4 block">🎉</span>
+                <h3 class="text-2xl font-black text-green-800 mb-2">¡Todo al día!</h3>
+                <p class="text-green-700">No tienes conceptos pendientes por reforzar. ¡Sigue así!</p>
+            </div>
+
+            <div id="reforzamiento-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
+                <!-- Tarjetas generadas dinmicamente -->
+            </div>
+        </section>
+
 
         <section id="view-perfil" class="view-section hidden fade-in">
             <div class="mb-10">
@@ -657,7 +714,7 @@
                             <p class="text-stone-500 text-sm">Explora las funciones afín (recta) y cuadrática (parábola). Modifica los coeficientes y observa el cambio en el plano cartesiano.</p>
                             
                             <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200">
-                                <select id="func-tipo" class="w-full mb-4 p-2 rounded-lg border border-stone-300 font-bold" onchange="updateFunciones()">
+                                <select id="func-tipo" class="w-full mb-4 p-2 rounded-lg border border-stone-300 font-bold text-stone-900 bg-white dark:bg-stone-800 dark:text-white dark:border-stone-600 focus:ring-2 focus:ring-indigo-500 outline-none" onchange="updateFunciones()">
                                     <option value="cuadratica">Función Cuadrática: y = ax² + bx + c</option>
                                     <option value="afin">Función Afín: y = mx + n</option>
                                 </select>
@@ -1072,6 +1129,7 @@
                 for (let i = 0; i < actualCount; i++) {
                     const gen = availableGenerators[i];
                     let q = gen.generate();
+                    q.generatorId = gen.id !== undefined ? gen.id : this.generators.indexOf(gen);
                     
                     q.exam = gen.exam;
                     q.topic = gen.topic;
@@ -2196,7 +2254,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                             text: `En un día de invierno en ${ctx.ciudad}, la temperatura mínima fue de ${ctx.temp1}°C a las 06:00 am, y la máxima fue de ${ctx.temp2}°C a las 15:00 hrs. ¿Cuál fue la variación de temperatura durante ese período?`,
                             options: [`${dif}°C`, `${ctx.temp1 + ctx.temp2}°C`, `${Math.abs(ctx.temp1)}°C`, `${ctx.temp2}°C`],
                             correct: 0,
-                            explanation: `<br><b>Paso 1:</b> La variación térmica siempre es la diferencia entre el estado final y el inicial.<br><b>Paso 2:</b> Anotamos la fórmula: \\( \Delta T = T_{\\text{final}} - T_{\\text{inicial}} \\).<br><b>Paso 3:</b> Reemplazamos los datos: tu temperatura final es ${ctx.temp2}°C y la inicial es ${ctx.temp1}°C.<br><br>💡 <b>Cálculo:</b> \\( ${ctx.temp2} - (${ctx.temp1}) = ${ctx.temp2} + ${Math.abs(ctx.temp1)} = ${dif}^\\circ\\text{C} \\).`
+                            explanation: `<br><b>Paso 1:</b> La variación térmica siempre es la diferencia entre el estado final y el inicial.<br><b>Paso 2:</b> Anotamos la fórmula: \\( \\Delta T = T_{\\text{final}} - T_{\\text{inicial}} \\).<br><b>Paso 3:</b> Reemplazamos los datos: tu temperatura final es ${ctx.temp2}°C y la inicial es ${ctx.temp1}°C.<br><br>💡 <b>Cálculo:</b> \\( ${ctx.temp2} - (${ctx.temp1}) = ${ctx.temp2} + ${Math.abs(ctx.temp1)} = ${dif}^\\circ\\text{C} \\).`
                         };
                     }
                 },
@@ -3618,7 +3676,19 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                 document.getElementById('btn-theme').innerText = isDark ? '☀️' : '🌙';
             },
 
+            // Accesibilidad
+            fontSizeLevel: 0,
+            changeFontSize(step) {
+                this.fontSizeLevel += step;
+                if (this.fontSizeLevel > 3) this.fontSizeLevel = 3;
+                if (this.fontSizeLevel < -1) this.fontSizeLevel = -1;
+                const newSize = 16 + (this.fontSizeLevel * 2);
+                document.documentElement.style.fontSize = `${newSize}px`;
+            },
+
             init() {
+                // Asignar IDs fijos a generadores
+                QuestionEngine.generators.forEach((g, idx) => g.id = idx);
                 this.renderChart();
                 this.initVisualizers();
                 
@@ -3709,9 +3779,16 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                 else this.openLoginModal();
             },
             openLoginModal() {
-                document.getElementById('login-modal').classList.remove('hidden'); document.getElementById('login-modal').classList.remove('hidden'); },
+                document.getElementById('login-modal').classList.remove('hidden');
+            },
+            openResetModal() {
+                document.getElementById('reset-modal').classList.remove('hidden');
+                document.getElementById('reset-message').classList.add('hidden');
+            },
+            closeResetModal() {
+                document.getElementById('reset-modal').classList.add('hidden');
+            },
             closeLoginModal() {
-                document.getElementById('login-modal').classList.add('hidden');
                 document.getElementById('login-modal').classList.add('hidden');
             },
             openRegisterModal() {
@@ -3868,6 +3945,29 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                 this.currentQIndex = 0;
                 this.userAnswers = {};
                 this.isQuestionChecked = false;
+                
+                const timeRadio = document.querySelector('input[name="time-limit"]:checked');
+                this.timeLimitMins = timeRadio ? parseInt(timeRadio.value) : 0;
+                if (this.timerInterval) clearInterval(this.timerInterval);
+                const timerContainer = document.getElementById('quiz-timer-container');
+                if (this.timeLimitMins > 0) {
+                    this.timeRemaining = this.timeLimitMins * 60;
+                    timerContainer.classList.remove('hidden');
+                    timerContainer.classList.add('flex');
+                    this.updateTimerUI();
+                    this.timerInterval = setInterval(() => {
+                        this.timeRemaining--;
+                        this.updateTimerUI();
+                        if (this.timeRemaining <= 0) {
+                            clearInterval(this.timerInterval);
+                            alert("¡Tiempo agotado! Tu ensayo finalizará automáticamente.");
+                            this.finishQuiz();
+                        }
+                    }, 1000);
+                } else {
+                    timerContainer.classList.add('hidden');
+                    timerContainer.classList.remove('flex');
+                }
 
                 document.getElementById('practica-dashboard').classList.add('hidden');
                 document.getElementById('practica-results').classList.add('hidden');
@@ -3997,6 +4097,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                 
                 if (isCorrect) {
                     feedbackBox.classList.add('bg-green-50', 'border-green-200');
+                    if (this.isReforzamientoMode) this.checkReforzamientoSuccess(true);
                     feedbackBox.innerHTML = `
                         <h4 class="text-xl font-black text-green-700 mb-2">¡Excelente!</h4>
                         <p class="text-green-900 leading-relaxed">${qData.explanation}</p>
@@ -4012,7 +4113,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                 if (window.MathJax) {
                     setTimeout(() => {
                         MathJax.typesetClear();
-                        MathJax.typesetPromise([feedbackBox]).catch((err) => console.log(err));
+                        MathJax.typesetPromise([document.getElementById('quiz-question-container')]).catch((err) => console.log(err));
                     }, 50);
                 }
 
@@ -4026,6 +4127,15 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                         actionBtn.className = "px-8 py-3 rounded-xl font-bold text-stone-900 bg-white border border-stone-200 hover:bg-stone-100 transition-colors shadow-sm";
                     }
                 }
+            },
+
+            updateTimerUI() {
+                const min = Math.floor(this.timeRemaining / 60);
+                const sec = this.timeRemaining % 60;
+                const minStr = min < 10 ? '0' + min : min;
+                const secStr = sec < 10 ? '0' + sec : sec;
+                const el = document.getElementById('quiz-timer');
+                if(el) el.innerText = `${minStr}:${secStr}`;
             },
 
             nextQuestion() { 
@@ -4042,14 +4152,44 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
             },
 
             finishQuiz() {
+                if (this.timerInterval) clearInterval(this.timerInterval);
+                if (this.isReforzamientoMode) {
+                    this.isReforzamientoMode = false;
+                    document.getElementById('practica-quiz').classList.add('hidden');
+                    document.getElementById('view-practica').classList.add('hidden');
+                    this.navigate('reforzamiento');
+                    return;
+                }
                 let score = 0;
                 let answered = 0;
+                let newErrors = [];
                 this.quizQuestions.forEach((q, idx) => {
                     if (this.userAnswers[idx] !== undefined) {
                         answered++;
-                        if (this.userAnswers[idx] === q.correct) score++;
+                        if (this.userAnswers[idx] === q.correct) {
+                            score++;
+                        } else {
+                            if(q.generatorId !== undefined) newErrors.push(q.generatorId);
+                        }
+                    } else {
+                        // Omitida tambin es error
+                        if(q.generatorId !== undefined) newErrors.push(q.generatorId);
                     }
                 });
+
+                if (newErrors.length > 0 && window.app.loggedEmail) {
+                    // Update local
+                    if (!this.userStats.errores) this.userStats.errores = [];
+                    newErrors.forEach(err => { if(!this.userStats.errores.includes(err)) this.userStats.errores.push(err); });
+                    // Update Firestore
+                    if (window.db && window.fbDoc && window.fbSetDoc && window.fbArrayUnion) {
+                        try {
+                            window.fbSetDoc(window.fbDoc(window.db, "usuarios", window.app.loggedEmail), {
+                                errores: window.fbArrayUnion(...newErrors)
+                            }, { merge: true });
+                        } catch(e) { console.error("Error guardando errores en DB", e); }
+                    }
+                }
 
                 if (!this.userStats.history) this.userStats.history = [];
                 const d = new Date();
@@ -4161,11 +4301,122 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             },
 
+
+            // --- REFORZAMIENTO ---
+            renderReforzamiento() {
+                const grid = document.getElementById('reforzamiento-grid');
+                const empty = document.getElementById('reforzamiento-empty');
+                if (!grid || !empty) return;
+                
+                grid.innerHTML = '';
+                const errores = this.userStats.errores || [];
+                
+                if (errores.length === 0) {
+                    grid.classList.add('hidden');
+                    empty.classList.remove('hidden');
+                    return;
+                }
+                
+                grid.classList.remove('hidden');
+                empty.classList.add('hidden');
+                
+                errores.forEach(genId => {
+                    const idNum = parseInt(genId);
+                    const gen = QuestionEngine.generators[idNum];
+                    if (!gen) return;
+                    
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-6 rounded-3xl border border-stone-200 shadow-sm hover:shadow-md hover:border-red-300 transition-all cursor-pointer relative overflow-hidden group";
+                    card.onclick = () => this.startReforzamiento(genId);
+                    card.innerHTML = `
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-red-50 rounded-bl-full -z-10 group-hover:scale-110 transition-transform"></div>
+                        <span class="bg-red-100 text-red-800 text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full mb-4 inline-block">${gen.exam} - ${gen.difficulty}</span>
+                        <h3 class="text-xl font-bold text-stone-900 mb-2">${gen.topic}</h3>
+                        <p class="text-stone-500 text-sm">${gen.unit}</p>
+                        <div class="mt-6 flex justify-end">
+                            <span class="text-red-600 font-bold bg-white px-4 py-2 rounded-xl shadow-sm border border-stone-100 group-hover:bg-red-600 group-hover:text-white transition-colors">Practicar &rarr;</span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            },
+            
+            startReforzamiento(genId) {
+                const gen = QuestionEngine.generators[genId];
+                if (!gen) return;
+                
+                // Usamos el mismo motor pero generando solo esta pregunta
+                let q = gen.generate();
+                q.generatorId = parseInt(genId);
+                q.exam = gen.exam;
+                q.topic = gen.topic;
+                q.difficulty = gen.difficulty;
+                
+                this.quizQuestions = [q];
+                this.currentQIndex = 0;
+                this.userAnswers = {};
+                this.isQuestionChecked = false;
+                
+                // Modo reforzamiento (usamos la misma UI de quiz, pero sin timer y ocultando header)
+                document.getElementById('view-reforzamiento').classList.add('hidden');
+                document.getElementById('view-practica').classList.remove('hidden');
+                document.getElementById('practica-dashboard').classList.add('hidden');
+                document.getElementById('practica-results').classList.add('hidden');
+                
+                const timerContainer = document.getElementById('quiz-timer-container');
+                if (timerContainer) {
+                    timerContainer.classList.add('hidden');
+                    timerContainer.classList.remove('flex');
+                }
+                if (this.timerInterval) clearInterval(this.timerInterval);
+                
+                document.getElementById('practica-quiz').classList.remove('hidden');
+                document.getElementById('quiz-header-title').innerText = `REFORZAMIENTO: ${gen.topic}`;
+                this.renderQuizQuestion();
+                
+                // Marcar bandera especial
+                this.isReforzamientoMode = true;
+                this.currentReforzamientoId = genId;
+            },
+            
+            checkReforzamientoSuccess(isCorrect) {
+                if (isCorrect) {
+                    // Confeti (Simple CSS o manipulacin)
+                    const container = document.getElementById('quiz-question-container');
+                    const confeti = document.createElement('div');
+                    confeti.innerHTML = '🎉 ¡Excelente! Concepto Dominado 🎉';
+                    confeti.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white font-black text-2xl px-8 py-4 rounded-3xl shadow-2xl z-50 animate-bounce';
+                    document.body.appendChild(confeti);
+                    setTimeout(() => confeti.remove(), 3000);
+                    
+                    // Remover de base de datos
+                    const genId = this.currentReforzamientoId;
+                    const errIndex = this.userStats.errores.indexOf(genId);
+                    if (errIndex > -1) {
+                        this.userStats.errores.splice(errIndex, 1);
+                    }
+                    if (window.db && window.fbDoc && window.fbUpdateDoc && window.fbArrayRemove && window.app.loggedEmail) {
+                        try {
+                            window.fbUpdateDoc(window.fbDoc(window.db, "usuarios", window.app.loggedEmail), {
+                                errores: window.fbArrayRemove(genId)
+                            });
+                        } catch(e) { console.error(e); }
+                    }
+                }
+            },
+
             exitQuiz() {
+                if (this.timerInterval) clearInterval(this.timerInterval);
                 document.getElementById('practica-quiz').classList.add('hidden');
                 document.getElementById('practica-results').classList.add('hidden');
-                document.getElementById('practica-dashboard').classList.remove('hidden');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (this.isReforzamientoMode) {
+                    this.isReforzamientoMode = false;
+                    document.getElementById('view-practica').classList.add('hidden');
+                    this.navigate('reforzamiento');
+                } else {
+                    document.getElementById('practica-dashboard').classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
             },
 
             // --- TUTORIAS ZOOM ---
@@ -4465,8 +4716,13 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
     <script type="module">
         // 1. Importar herramientas de Firebase (¡Sumamos Firestore!)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+        window.fbDoc = doc;
+        window.fbUpdateDoc = updateDoc;
+        window.fbSetDoc = setDoc;
+        window.fbArrayUnion = arrayUnion;
+        window.fbArrayRemove = arrayRemove;
 
         // 2. TUS LLAVES MAESTRAS
         const firebaseConfig = {
@@ -4482,6 +4738,7 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
         const app_fb = initializeApp(firebaseConfig);
         const auth = getAuth(app_fb);
         const db = getFirestore(app_fb); // Inicializamos la base de datos
+        window.db = db;
 
         // 3. Capturar elementos de la interfaz
         const btnLogin = document.getElementById('btn-login');
@@ -4599,6 +4856,15 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
                             if (navPerfil) navPerfil.classList.remove('hidden');
                             const navPractica = document.getElementById('nav-practica');
                             if (navPractica) navPractica.innerHTML = '<span class="mr-1">🔓</span> Práctica';
+                            const navReforzamiento = document.getElementById('nav-reforzamiento');
+                            if (navReforzamiento) navReforzamiento.classList.remove('hidden');
+                            
+                            // Initialize errores si no existe
+                            if (!window.app.userStats.errores) window.app.userStats.errores = [];
+                            // Leer de base de datos
+                            if (datosUsuario.errores) {
+                                window.app.userStats.errores = datosUsuario.errores;
+                            }
                             
                             return; 
                         }
@@ -4874,5 +5140,29 @@ Nota: Asume que el total de estudiantes encuestados suma ${den}. Si se seleccion
             }
         }, 1000);
     </script>
+
+        <!-- Reset Modal -->
+        <div id="reset-modal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-[110] hidden flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-2xl relative animate-bounce-in border border-stone-200">
+                <button onclick="app.closeResetModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-stone-100 text-stone-500 hover:bg-stone-200 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <div class="p-8">
+                    <h3 class="text-2xl font-black text-stone-900 mb-2">Recuperar Cuenta</h3>
+                    <p class="text-stone-500 text-sm mb-6">Ingresa tu correo para recibir un enlace de restablecimiento de contraseña.</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-stone-500 uppercase tracking-wider mb-2">Correo Electrónico</label>
+                            <input type="email" id="reset-email" class="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 text-stone-900 focus:outline-none focus:ring-2 focus:ring-stone-900 focus:bg-white transition-all font-medium" placeholder="tu@email.com">
+                        </div>
+                    </div>
+                    <p id="reset-message" class="text-sm mt-4 hidden font-bold p-3 rounded-lg"></p>
+                    <div class="mt-6">
+                        <button id="btn-reset-password" class="w-full bg-stone-900 hover:bg-black text-white font-bold py-3.5 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5">Enviar Enlace</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 </body>
 </html>
